@@ -1,0 +1,12 @@
+.header-container{
+    display: block;
+    width: 100%;
+    height: 20%; //we will need to review this later
+    border: 2px solid black;
+}
+
+.image-header{
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}

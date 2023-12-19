@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-
+// will be possible to do a random function in the future
 }
