@@ -144,4 +144,4 @@ def get_photo_by_id(photo_id):
 
 
 if __name__=='__main__':
-    app.run(port=5000)
+    app.run(port=8000)  # The port could be a problem if the port is already used by other application
