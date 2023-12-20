@@ -5,5 +5,11 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class HttpService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
+
+  public getRootFolder() {
+    this.http.get(this.configUrl);//here we will need to add the URL for the local deployment
+  }
+
 }
