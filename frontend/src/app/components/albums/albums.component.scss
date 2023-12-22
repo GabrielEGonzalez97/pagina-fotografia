@@ -1,0 +1,144 @@
+.albums-container {
+    width: calc(100% - 6rem);
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    margin: 2rem 3rem;
+}
+
+.row {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+
+    .image-container { // TODO: Add media-screen
+        width: 33%;
+        margin: 0.5rem; // TODO: Review this later
+        background-color: lightgray;
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
+
+.row .image-container {
+    height: 500px;
+    aspect-ratio: 4/3;
+
+    @media screen and (max-width: 768px) {
+        height: 300px; /* Ajusta la altura para dispositivos de pantalla mediana */
+        aspect-ratio: 4/3;
+    }
+
+    @media screen and (max-width: 480px) {
+        height: 200px; /* Ajusta la altura para dispositivos de pantalla pequeña */
+        aspect-ratio: 4/3;
+    }
+}
+
+
+// .column:nth-child(1) {
+//     .image-container {
+//         height: 500px;
+//     }
+// }
+
+// .col1,.col2,.col3{
+//     width: 33%;
+//     height: 100%;
+//     display: flex;
+//     flex-direction: column;
+// }
+
+
+// .col1 .img1{
+//     width: 100%;
+//     height: 20vh;
+//     background-color: red;
+
+// }
+// .col1 .img2{
+//     width: 100%;
+//     height: 20vh;
+//     background-color: yellow;
+
+// }
+// .col1 .img3{
+//     width: 100%;
+//     height: 20vh;
+//     background-color: gray;
+// }
+// .col1 .img4{
+//     width: 100%;
+//     height: 20vh;
+//     background-color: blue;
+
+// }
+// .col1 .img5{
+//     width: 100%;
+//     height: 20vh;
+//     background-color: rebeccapurple;
+
+// }
+
+
+// .col2 .img1{
+//     width: 100%;
+//     height: 16vh;
+//     background-color: black;
+// }
+// .col2 .img2{
+//     width: 100%;
+//     height: 16vh;
+//     background-color: orange;
+// }
+// .col2 .img3{
+//     width: 100%;
+//     height: 16vh;
+//     background-color: green;
+// }
+// .col2 .img4{
+//     width: 100%;
+//     height: 16vh;
+//     background-color: tomato;
+
+// }
+// .col2 .img5{
+//     width: 100%;
+//     height: 16vh;
+//     background-color: pink;
+
+// }
+
+
+// .col3 .img1{
+//     width: 100%;
+//     height: 18vh;
+//     background-color: purple;
+// }
+// .col3 .img2{
+//     width: 100%;
+//     height: 18vh;
+//     background-color: salmon;
+// }
+// .col3 .img3{
+//     width: 100%;
+//     height: 18vh;
+//     background-color: teal;
+// }
+
+// .col3 .img4{
+//     width: 100%;
+//     height: 18vh;
+//     background-color: gold;
+
+// }
+// .col3 .img5{
+//     width: 100%;
+//     height: 18vh;
+//     background-color:darkmagenta;
+
+// }

@@ -27,4 +27,11 @@ export class HttpService {
     const endpointUrl: string = `${BACKEND_API_URL}/getPhotosWithinAlbum/${albumId}`;
     return this.http.get<IGoogleDriveFields[]>(endpointUrl);
   }
+
+  public getPhotoById(photoId: string) {
+    const endpointUrl: string = `${BACKEND_API_URL}/getPhotoById/${photoId}`;
+    return this.http.get(endpointUrl, {
+      responseType: 'arraybuffer',
+    });
+  }
 }

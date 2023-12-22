@@ -12,6 +12,8 @@ export class AlbumsComponent implements OnInit {
   private rootFolderInfo: IGoogleDriveFields[] = [];
   private albumsInfo: IGoogleDriveFields[] = [];
 
+  photoData: any;
+
   constructor(private httpService: HttpService) {}
 
   public async ngOnInit(): Promise<void> {
@@ -27,5 +29,14 @@ export class AlbumsComponent implements OnInit {
         });
       }
     );
+
+    await firstValueFrom(
+      this.httpService.getPhotoById('1PpMCRdPebe09wWSqsFGKDT6WKrjdpc_Q')
+    ).then((data) => {
+      const blob = new Blob([data]);
+      const url = window.URL.createObjectURL(blob);
+      this.photoData = url;
+      console.log(url);
+    });
   }
 }

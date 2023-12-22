@@ -6,3 +6,7 @@
     margin: 0; // TODO: Review if this is needed
     font-family: sans-serif; //if we will change the color of the background, we need to verify the color of the strings
 }
+
+:host(body) {
+    margin: 0;
+}
