@@ -3,7 +3,7 @@
     height: auto;
     display: flex;
     flex-direction: column;
-    margin: 2rem 3rem;
+    margin: 2rem 3rem; // TODO: Review this later
 }
 
 .row {
@@ -12,11 +12,34 @@
     display: flex;
     flex-direction: row;
 
-    .image-container { // TODO: Add media-screen
-        width: 33%;
-        margin: 0.5rem; // TODO: Review this later
-        background-color: lightgray;
+    @media screen and (max-width: 768px) {
+        flex-direction: column;
+    }
 
+    .image1{
+        height: 29rem; 
+    }
+
+    .image2{
+        height: 27rem;
+    }
+
+    .image3{
+        height: 31rem;
+        
+    }
+
+    .image-container { // TODO: Add media-screen
+        width: 30%;
+        margin: 0.1rem; // TODO: Review this later
+        background-color: lightgray;
+        aspect-ratio: 4/3;
+
+        @media screen and (max-width: 768px) {
+            aspect-ratio: 4/3;
+            width: 100%;
+        }
+        
         img {
             width: 100%;
             height: 100%;
@@ -24,20 +47,7 @@
     }
 }
 
-.row .image-container {
-    height: 500px;
-    aspect-ratio: 4/3;
 
-    @media screen and (max-width: 768px) {
-        height: 300px; /* Ajusta la altura para dispositivos de pantalla mediana */
-        aspect-ratio: 4/3;
-    }
-
-    @media screen and (max-width: 480px) {
-        height: 200px; /* Ajusta la altura para dispositivos de pantalla pequeña */
-        aspect-ratio: 4/3;
-    }
-}
 
 
 // .column:nth-child(1) {

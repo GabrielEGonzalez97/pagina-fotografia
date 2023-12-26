@@ -2,12 +2,59 @@
     width: 100%;
     height: 100%; //we will need to review this later
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
 
+
     .nav-buttons {
-        display: flex;
+        display: none;
+        flex-direction: column;
         width: 25%;
         justify-content: space-between;
     }
+
+    .nav-contacto{
+        display: none;
+    }
+
+    
 }
+
+.nav-menu{
+    display: flex; //I don't know if I should add the menu to the nav
+}
+
+@media screen and (min-width: 768px) {
+    .nav-container {
+        width: 100%;
+        height: 100%; //we will need to review this later
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    
+    
+        .nav-buttons {
+            display: flex;
+            flex-direction: row;
+            width: 25%;
+            justify-content: space-between;
+        }
+
+        .nav-contacto{
+            display: flex;
+        }
+    
+        
+    }
+    
+    .nav-menu{
+            display: none;
+        }
+}
+
+
+
+/*@media screen and (max-width: 768px) {
+    aspect-ratio: 4/3;
+    width: 100%;
+}*/
