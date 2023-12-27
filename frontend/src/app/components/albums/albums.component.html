@@ -1,48 +1,9 @@
 <div class="albums-container">
-    <!--TODO: We will need to do a charge image-->
-    <div class="row">
-        <div class="image-container image1">
-            <img [src]="photoData" alt="Photo">
+    <ng-container *ngFor="let photo of photos">
+        <div class="column">
+            <div class="image-container">
+                <img [src]="photo" alt="Photo">
+            </div>
         </div>
-        <div class="image-container image2">
-
-        </div>
-        <div class="image-container image3">
-
-        </div>
-    </div>
-    <div class="row">
-        <div class="image-container image1">
-
-        </div>
-        <div class="image-container image2">
-
-        </div>
-        <div class="image-container image3">
-
-        </div>
-    </div>
-    <div class="row">
-        <div class="image-container image1">
-
-        </div>
-        <div class="image-container image2">
-
-        </div>
-        <div class="image-container image3">
-
-        </div>
-    </div>
-    <div class="row">
-        <div class="image-container image1">
-
-        </div>
-        <div class="image-container image2">
-
-        </div>
-        <div class="image-container image3">
-
-        </div>
-    </div>
-
+    </ng-container>
 </div>

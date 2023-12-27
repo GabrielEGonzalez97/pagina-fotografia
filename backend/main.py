@@ -32,7 +32,7 @@ def get_root_folder_info():
 
             response = google_drive_service.files().list(q=query_to_search_for_root_folder,
                                                         spaces='drive',
-                                                        fields="nextPageToken, files(id, name)",
+                                                        fields="nextPageToken, files(id, name, createdTime)",
                                                         pageToken=page_token
                                                         ).execute()
 
@@ -66,7 +66,7 @@ def get_albums_info(root_folder_id: str):
                 .list(
                     q=query_to_search_for_albums,
                     spaces="drive",
-                    fields="nextPageToken, files(id, name)",
+                    fields="nextPageToken, files(id, name, createdTime)",
                     pageToken=page_token,
                 )
                 .execute()
@@ -101,7 +101,7 @@ def get_photos_within_album(album_id: str):
                 .list(
                     q=query_to_search_for_albums,
                     spaces="drive",
-                    fields="nextPageToken, files(id, name, mimeType)",
+                    fields="nextPageToken, files(id, name, mimeType, createdTime)",
                     pageToken=page_token,
                 )
                 .execute()

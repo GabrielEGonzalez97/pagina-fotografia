@@ -11,32 +11,39 @@ import { IGoogleDriveFields } from 'src/app/services/interfaces';
 export class AlbumsComponent implements OnInit {
   private rootFolderInfo: IGoogleDriveFields[] = [];
   private albumsInfo: IGoogleDriveFields[] = [];
-
-  photoData: any;
+  public firstPhotoByAlbum: Map<string, string> = new Map<string, string>(); // We need this for the moment when the user need to view a one specific
+  public photos: string[] = [];
 
   constructor(private httpService: HttpService) {}
 
   public async ngOnInit(): Promise<void> {
     await firstValueFrom(this.httpService.getRootFolder()).then(
+      // First we call the endpoint that returns the info of the root folder in Google Drive
       async (rootFolderInfo: IGoogleDriveFields[]) => {
         this.rootFolderInfo = rootFolderInfo;
-        console.log(this.rootFolderInfo);
         await firstValueFrom(
-          this.httpService.getAlbumsInfo(this.rootFolderInfo[0].id)
+          this.httpService.getAlbumsInfo(this.rootFolderInfo[0].id) // Second we call the endpoint that returns the info of each folder within the root folder
         ).then((albumsInfo: IGoogleDriveFields[]) => {
           this.albumsInfo = albumsInfo;
-          console.log(this.albumsInfo); // We will need the first photo of each album to render that photo in the page representing the album
+          this.albumsInfo.forEach(async (albumInfo: IGoogleDriveFields) => {
+            await firstValueFrom(
+              this.httpService.getPhotosWithinAlbum(albumInfo.id) // Third we call the endpoint that returns the photos within each album folder
+            ).then(async (photos: IGoogleDriveFields[]) => {
+              if (photos[0]) {
+                const firstPhotoId: string = photos[0].id;
+                await firstValueFrom(
+                  this.httpService.getPhotoById(firstPhotoId) // Fourth we call the endpoint that returns the photo itself
+                ).then((photo: ArrayBuffer) => {
+                  const blob: Blob = new Blob([photo]);
+                  const photoUrl: string = window.URL.createObjectURL(blob);
+                  this.firstPhotoByAlbum.set(albumInfo.id, photoUrl);
+                  this.photos.push(photoUrl);
+                });
+              }
+            });
+          });
         });
       }
     );
-
-    await firstValueFrom(
-      this.httpService.getPhotoById('1PpMCRdPebe09wWSqsFGKDT6WKrjdpc_Q')
-    ).then((data) => {
-      const blob = new Blob([data]);
-      const url = window.URL.createObjectURL(blob);
-      this.photoData = url;
-      console.log(url);
-    });
   }
 }
