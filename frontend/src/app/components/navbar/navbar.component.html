@@ -1,9 +1,13 @@
 <nav class="nav-container">
-    <button class="nav-menu"> menu </button>
-    <div class="nav-buttons">
-        <button class="link-pages">Álbumes</button>
-        <button class="link-pages">Fotos</button>
-        <input class="search" type="text" placeholder="buscar..." alt="searcher">
+    <div class="nav-buttons" >
+        <button 
+        (click)="setActiveShow()"
+        class="nav-menu"> menu </button>
+        <div class="nav-buttons-menu" [ngClass]="{ 'show' : active }">
+            <button class="link-pages">Álbumes</button>
+            <button class="link-pages">Fotos</button>
+            <input class="search" type="text" placeholder="buscar..." alt="searcher"> 
+        </div>
     </div>
     <div class="nav-contacto">
         <button class="link-contacto">contacto</button> <!--this is a bug button for css purpose-->
