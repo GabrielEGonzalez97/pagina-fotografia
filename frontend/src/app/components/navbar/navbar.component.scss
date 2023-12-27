@@ -71,7 +71,7 @@
             .nav-buttons-menu{
                 display: flex;
                 flex-direction: row;
-                width: 100%;
+                width: 25%; //TODO: we need to review this style because nav buttons are missorganized
                 justify-content: space-between;
             }
         }

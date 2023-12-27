@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
   
-  public active : boolean = true;
+  public active : boolean = false;
   
   ngOnInit(): void {
     throw new Error('Method not implemented.');
