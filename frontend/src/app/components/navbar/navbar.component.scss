@@ -2,47 +2,38 @@
     width: 100%;
     height: 100%; //we will need to review this later
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-end;
+    //align-items: center;
 
     
-
     .nav-buttons {
+        width: 100%;
         display: flex;
         flex-direction: column;
-        width: 100%;
-        justify-content: flex-start;
-        align-items: center;
-        
+        justify-content: flex-start; 
+        background-color: red;
         .nav-menu {
             width: 100%;
             display: flex; //I don't know if I should add the menu to the nav
             justify-content: center;
             align-items: center;
         }
-
         .nav-buttons-menu{
             display: none;
             flex-direction: column;
             width: 100%;
             justify-content: flex-start;
-            align-items: center;
-
-            .link-pages, .search {
-                width: 100%;
-            }
         }
-
         .show{
             display: flex;
         }
-
-    
+        
     }
-    
-    .nav-contacto{
-            display: none;
-        }
+    .aside-bar{
+            width: 40%;
+            height: 70vh;
+            position: absolute;
+    }
 }
 
 
@@ -78,19 +69,7 @@
                 }
             }
         }
-
-        .nav-contacto{
-            width: 50%;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-
-        }
-    
-        
     }
-    
-    
 }
 
 

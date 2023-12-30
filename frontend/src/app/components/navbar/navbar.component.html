@@ -1,5 +1,5 @@
 <nav class="nav-container">
-    <div class="nav-buttons" >
+    <div class="nav-buttons" [ngClass]="{ 'aside-bar' : active }" >
         <button 
         (click)="setActiveShow()"
         class="nav-menu"> menu </button> <!--<mat-icon>reorder</mat-icon> icono hamburguesa-->
@@ -9,9 +9,4 @@
             <input class="search" type="text" placeholder="buscar..." alt="searcher"> 
         </div>
     </div>
-    <div class="nav-contacto">
-        <button class="link-contacto">contacto</button> <!--this is a bug button for css purpose-->
-    </div>        
-<!--TODO: we will need to add the contact's component in other container, because we could use the attribute "space between" for pull apart the two parts of navbar-->
-
 </nav>
