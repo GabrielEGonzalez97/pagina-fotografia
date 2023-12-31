@@ -1,9 +1,25 @@
 <div class="albums-container">
-    <ng-container *ngFor="let photo of photos">
-        <div class="column">
-            <div class="image-container">
-                <img [src]="photo" alt="Photo">
+    <ng-container *ngIf="areImagesLoading">
+        <ng-container *ngFor="let imageLoading of imagesLoading; let i = index">
+            <div class="column">
+                <div class="image-container">
+                    <ng-container *ngIf="imageLoading">
+                        <mat-spinner></mat-spinner>
+                    </ng-container>
+                    <ng-container *ngIf="!imageLoading">
+                        <img [src]="photos[i].photoUrl">
+                    </ng-container>
+                </div>
             </div>
-        </div>
+        </ng-container>
+    </ng-container>
+    <ng-container *ngIf="!areImagesLoading">
+        <ng-container *ngFor="let photo of photos">
+            <div class="column">
+                <div class="image-container">
+                    <img [src]="photo.photoUrl">
+                </div>
+            </div>
+        </ng-container>
     </ng-container>
 </div>

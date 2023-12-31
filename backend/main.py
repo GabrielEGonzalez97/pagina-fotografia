@@ -4,7 +4,7 @@ import io
 import string    
 import random
 
-from flask import Flask, request
+from flask import Flask, request, Response
 from googleapiclient.errors import HttpError
 
 from google_drive_service import GoogleDriveService
@@ -140,7 +140,9 @@ def get_photo_by_id(photo_id):
         print(F'An error occurred: {error}')
         file = None
 
-    return file.getvalue()
+    response = Response(file.getvalue(), content_type='image/png')
+
+    return response
 
 
 if __name__=='__main__':
