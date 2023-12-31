@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
+import { IPhoto } from 'src/app/common/interfaces';
 import { HttpService } from 'src/app/services/http.service';
 import { IGoogleDriveFields } from 'src/app/services/interfaces';
 
@@ -12,7 +13,7 @@ export class AlbumsComponent implements OnInit {
   private rootFolderInfo: IGoogleDriveFields[] = [];
   private albumsInfo: IGoogleDriveFields[] = [];
   public firstPhotoByAlbum: Map<string, string> = new Map<string, string>(); // We need this for the moment when the user need to view a one specific
-  public photos: string[] = [];
+  public photos: IPhoto[] = [];
 
   constructor(private httpService: HttpService) {}
 
@@ -37,7 +38,11 @@ export class AlbumsComponent implements OnInit {
                   const blob: Blob = new Blob([photo]);
                   const photoUrl: string = window.URL.createObjectURL(blob);
                   this.firstPhotoByAlbum.set(albumInfo.id, photoUrl);
-                  this.photos.push(photoUrl);
+                  const newPhoto: IPhoto = {
+                    photoUrl,
+                    albumCreatedTime: albumInfo.createdTime,
+                  };
+                  this.binaryInsertion(this.photos, newPhoto);
                 });
               }
             });
@@ -45,5 +50,36 @@ export class AlbumsComponent implements OnInit {
         });
       }
     );
+  }
+
+  private binaryInsertion(photos: IPhoto[], photo: IPhoto): void {
+    if (photos.length === 0) {
+      photos.push(photo);
+    } else {
+      this.binaryHelper(photos, photo, 0, photos.length - 1);
+    }
+  }
+
+  private binaryHelper(
+    photos: IPhoto[],
+    photo: IPhoto,
+    lBound: number,
+    uBound: number
+  ): void {
+    if (uBound <= lBound) {
+      if (photo.albumCreatedTime < photos[lBound].albumCreatedTime) {
+        photos.splice(lBound, 0, photo);
+      } else {
+        photos.splice(lBound + 1, 0, photo);
+      }
+    } else {
+      const midPoint: number = Math.floor((uBound - lBound) / 2) + lBound;
+
+      if (photo.albumCreatedTime < photos[midPoint].albumCreatedTime) {
+        this.binaryHelper(photos, photo, lBound, midPoint);
+      } else {
+        this.binaryHelper(photos, photo, midPoint + 1, uBound);
+      }
+    }
   }
 }
