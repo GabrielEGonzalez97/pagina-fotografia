@@ -14,7 +14,7 @@ export class NavbarComponent implements OnInit {
   }
 
   setActiveShow() : void {
-    this.active = !this.active;
+      this.active = !this.active;
   }
 
 }
