@@ -1,12 +1,12 @@
 <nav class="nav-container">
-    <div class="nav-buttons" [ngClass]="{ 'aside-bar' : active }" >
-        <a
-        (click)="setActiveShow()"
-        class="nav-menu"> menu </a> <!--<mat-icon>reorder</mat-icon> icono hamburguesa-->
+    <div class="nav-buttons" [ngClass]="{ 'aside-bar' : active }">
+        <button mat-icon-button color="accent" class="nav-menu" (click)="setActiveShow()">
+            <mat-icon>menu</mat-icon>
+        </button>
         <div class="nav-buttons-menu" [ngClass]="{ 'show' : active }">
             <a class="link-pages">Álbumes</a> <!--TODO: we need to do the back for this links-->
             <a class="link-pages">Fotos</a>
-            <input class="search" type="text" placeholder="buscar..." alt="searcher"> 
+            <input class="search" type="text" placeholder="buscar..." alt="searcher">
         </div>
     </div>
 </nav>

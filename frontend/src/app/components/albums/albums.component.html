@@ -1,14 +1,9 @@
 <div class="albums-container">
     <ng-container *ngIf="areImagesLoading">
-        <ng-container *ngFor="let imageLoading of imagesLoading; let i = index">
+        <ng-container *ngFor="let imageLoading of imagesLoading">
             <div class="column">
                 <div class="image-container">
-                    <ng-container *ngIf="imageLoading">
-                        <mat-spinner></mat-spinner>
-                    </ng-container>
-                    <ng-container *ngIf="!imageLoading">
-                        <img [src]="photos[i].photoUrl">
-                    </ng-container>
+                    <mat-spinner></mat-spinner>
                 </div>
             </div>
         </ng-container>
