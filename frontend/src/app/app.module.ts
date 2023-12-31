@@ -3,6 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AlbumsComponent } from './components/albums/albums.component';
@@ -22,7 +24,14 @@ import { PhotosComponent } from './components/photos/photos.component';
     PhotosComponent,
     ContactComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, CommonModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    CommonModule,
+    BrowserAnimationsModule,
+    MatProgressSpinnerModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

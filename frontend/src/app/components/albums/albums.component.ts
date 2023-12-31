@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
+import { NUMBER_ALBUMS_PER_PAGE } from 'src/app/common/constants';
 import { IPhoto } from 'src/app/common/interfaces';
 import { HttpService } from 'src/app/services/http.service';
 import { IGoogleDriveFields } from 'src/app/services/interfaces';
@@ -10,14 +11,23 @@ import { IGoogleDriveFields } from 'src/app/services/interfaces';
   styleUrls: ['./albums.component.scss'], //referencia del style scss
 })
 export class AlbumsComponent implements OnInit {
-  private rootFolderInfo: IGoogleDriveFields[] = [];
-  private albumsInfo: IGoogleDriveFields[] = [];
   public firstPhotoByAlbum: Map<string, string> = new Map<string, string>(); // We need this for the moment when the user need to view a one specific
   public photos: IPhoto[] = [];
+  public areImagesLoading: boolean = true;
+  public imagesLoading: boolean[] = [];
+
+  private rootFolderInfo: IGoogleDriveFields[] = [];
+  private albumsInfo: IGoogleDriveFields[] = [];
 
   constructor(private httpService: HttpService) {}
 
   public async ngOnInit(): Promise<void> {
+    for (let i: number = 0; i < NUMBER_ALBUMS_PER_PAGE; i++) {
+      this.imagesLoading.push(true);
+    }
+
+    let photosCount: number = 0;
+    let photosAux: IPhoto[] = [];
     await firstValueFrom(this.httpService.getRootFolder()).then(
       // First we call the endpoint that returns the info of the root folder in Google Drive
       async (rootFolderInfo: IGoogleDriveFields[]) => {
@@ -42,8 +52,19 @@ export class AlbumsComponent implements OnInit {
                     photoUrl,
                     albumCreatedTime: albumInfo.createdTime,
                   };
-                  this.binaryInsertion(this.photos, newPhoto);
+                  this.binaryInsertion(photosAux, newPhoto);
+                  photosCount += 1;
+                  if (photosCount === this.albumsInfo.length) {
+                    this.areImagesLoading = false;
+                    this.photos = photosAux;
+                  }
                 });
+              } else {
+                photosCount += 1;
+                if (photosCount === this.albumsInfo.length) {
+                  this.areImagesLoading = false;
+                  this.photos = photosAux;
+                }
               }
             });
           });
@@ -55,6 +76,7 @@ export class AlbumsComponent implements OnInit {
   private binaryInsertion(photos: IPhoto[], photo: IPhoto): void {
     if (photos.length === 0) {
       photos.push(photo);
+      this.imagesLoading[0] = false;
     } else {
       this.binaryHelper(photos, photo, 0, photos.length - 1);
     }
@@ -69,8 +91,10 @@ export class AlbumsComponent implements OnInit {
     if (uBound <= lBound) {
       if (photo.albumCreatedTime < photos[lBound].albumCreatedTime) {
         photos.splice(lBound, 0, photo);
+        this.imagesLoading[lBound] = false;
       } else {
         photos.splice(lBound + 1, 0, photo);
+        this.imagesLoading[lBound + 1] = false;
       }
     } else {
       const midPoint: number = Math.floor((uBound - lBound) / 2) + lBound;
