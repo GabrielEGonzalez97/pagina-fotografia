@@ -22,10 +22,11 @@
         width: calc(100% * 1 - 1rem);
     }
 
-    .image-container { // TODO: Add media-screen
+    .image-container {
         display: flex;
         justify-content: center;
         align-items: center;
+        position: relative;
         width: 100%;
         background-color: #EEEEEE;
         aspect-ratio: 4/3;
@@ -38,5 +39,28 @@
         .mat-mdc-progress-spinner {
             --mdc-circular-progress-active-indicator-color: lightgray;
         }
+
+        .photo-legend {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            margin: 1rem;
+
+            .album-name {
+                margin-bottom: 0.5rem !important;
+            }
+
+            .album-name, .album-number-photos {
+                margin: 0;
+                color: #fff;
+                font-weight: bold;
+                text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+            }
+        }
+    }
+
+    .image-container-with-content:hover {
+        cursor: pointer;
+        opacity: 0.8;
     }
 }

@@ -50,7 +50,11 @@ export class AlbumsComponent implements OnInit {
                   this.firstPhotoByAlbum.set(albumInfo.id, photoUrl);
                   const newPhoto: IPhoto = {
                     photoUrl,
-                    albumCreatedTime: albumInfo.createdTime,
+                    album: {
+                      albumName: albumInfo.name,
+                      albumCreatedTime: albumInfo.createdTime,
+                      photos: photos,
+                    },
                   };
                   this.binaryInsertion(photosAux, newPhoto);
                   photosCount += 1;
@@ -89,7 +93,9 @@ export class AlbumsComponent implements OnInit {
     uBound: number
   ): void {
     if (uBound <= lBound) {
-      if (photo.albumCreatedTime < photos[lBound].albumCreatedTime) {
+      if (
+        photo.album.albumCreatedTime < photos[lBound].album.albumCreatedTime
+      ) {
         photos.splice(lBound, 0, photo);
         this.imagesLoading[lBound] = false;
       } else {
@@ -99,7 +105,9 @@ export class AlbumsComponent implements OnInit {
     } else {
       const midPoint: number = Math.floor((uBound - lBound) / 2) + lBound;
 
-      if (photo.albumCreatedTime < photos[midPoint].albumCreatedTime) {
+      if (
+        photo.album.albumCreatedTime < photos[midPoint].album.albumCreatedTime
+      ) {
         this.binaryHelper(photos, photo, lBound, midPoint);
       } else {
         this.binaryHelper(photos, photo, midPoint + 1, uBound);

@@ -11,8 +11,12 @@
     <ng-container *ngIf="!areImagesLoading">
         <ng-container *ngFor="let photo of photos">
             <div class="column">
-                <div class="image-container">
+                <div class="image-container image-container-with-content">
                     <img [src]="photo.photoUrl">
+                    <div class="photo-legend">
+                        <h4 class="album-name">{{photo.album.albumName}}</h4>
+                        <h5 class="album-number-photos">{{photo.album.photos.length}} fotos</h5>
+                    </div>
                 </div>
             </div>
         </ng-container>
