@@ -1,4 +1,4 @@
-<nav class="nav-container">
+<nav class="nav-container" [ngClass]="{ 'nav-container-position' : active }">
     <div class="nav-buttons" [ngClass]="{ 'aside-bar' : active }">
         <button mat-icon-button color="accent" class="nav-menu" (click)="setActiveShow()">
             <mat-icon>menu</mat-icon>

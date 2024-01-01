@@ -46,8 +46,9 @@
 
   .aside-bar {
     width: 40%;
-    height: 70vh;
-    position: absolute;
+    height: 100vh;
+    position: sticky;
+    top: 0;
     transition-duration: 1.2s;
     z-index: 1;
 
@@ -60,6 +61,10 @@
       color: #fff;
     }
   }
+}
+
+.nav-container-position {
+  position: absolute;
 }
 
 @media screen and (min-width: 768px) {
@@ -116,5 +121,9 @@
       height: 100%;
       position: relative;
     }
+  }
+
+  .nav-container-position {
+    position: relative;
   }
 }

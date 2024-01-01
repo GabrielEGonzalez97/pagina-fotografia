@@ -1,6 +1,7 @@
 .page-container {
     display: flex;
     flex-direction: column;
+    position: relative;
     min-height: 100vh;
     height: auto;
     margin: 0; // TODO: Review if this is needed
