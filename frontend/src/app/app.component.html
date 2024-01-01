@@ -1,6 +1,6 @@
 <div class="page-container">
-    <app-header />
+    <app-header [photos]="photos" />
     <app-navbar />
-    <app-albums />
+    <app-albums (photosEmitter)="updatePhotos($event)" />
     <app-footer />
 </div>

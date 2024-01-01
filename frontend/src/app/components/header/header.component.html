@@ -1,3 +1,8 @@
-<div class="header-container">
-    <img class="image-header" src="assets/images/basura.jpg" alt="portada" >
+<div class="header-container" (click)="changeHeaderPicture()">
+    <ng-container *ngIf="!photoToShow">
+        <mat-spinner></mat-spinner>
+    </ng-container>
+    <ng-container *ngIf="photoToShow">
+        <img class="image-header" [src]="photoToShow.photoUrl">
+    </ng-container>
 </div>

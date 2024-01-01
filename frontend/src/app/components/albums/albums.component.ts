@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { NUMBER_ALBUMS_PER_PAGE } from 'src/app/common/constants';
 import { IPhoto } from 'src/app/common/interfaces';
@@ -11,6 +11,10 @@ import { IGoogleDriveFields } from 'src/app/services/interfaces';
   styleUrls: ['./albums.component.scss'], //referencia del style scss
 })
 export class AlbumsComponent implements OnInit {
+  @Output() photosEmitter: EventEmitter<IPhoto[]> = new EventEmitter<
+    IPhoto[]
+  >();
+
   public firstPhotoByAlbum: Map<string, string> = new Map<string, string>(); // We need this for the moment when the user need to view a one specific
   public photos: IPhoto[] = [];
   public areImagesLoading: boolean = true;
@@ -61,6 +65,7 @@ export class AlbumsComponent implements OnInit {
                   if (photosCount === this.albumsInfo.length) {
                     this.areImagesLoading = false;
                     this.photos = photosAux;
+                    this.photosEmitter.emit(this.photos);
                   }
                 });
               } else {
@@ -68,6 +73,7 @@ export class AlbumsComponent implements OnInit {
                 if (photosCount === this.albumsInfo.length) {
                   this.areImagesLoading = false;
                   this.photos = photosAux;
+                  this.photosEmitter.emit(this.photos);
                 }
               }
             });

@@ -1,10 +1,19 @@
 import { Component } from '@angular/core';
+import { IPhoto } from './common/interfaces';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'frontend';
+  public photos: IPhoto[] = [];
+
+  constructor() {}
+
+  public ngOnInit(): void {}
+
+  public updatePhotos(photos: IPhoto[]): void {
+    this.photos = photos;
+  }
 }
