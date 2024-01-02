@@ -8,8 +8,9 @@
             </div>
         </ng-container>
     </ng-container>
+
     <ng-container *ngIf="!areImagesLoading">
-        <ng-container *ngFor="let photo of photos">
+        <ng-container *ngFor="let photo of getPaginatedPhotos()">
             <div class="column">
                 <div class="image-container image-container-with-content"
                     (click)="navigateTo('album/' + photo.album.albumId)">
@@ -23,3 +24,6 @@
         </ng-container>
     </ng-container>
 </div>
+
+<mat-paginator [length]="photos.length" [pageSize]="pageSize" [pageIndex]="pageIndex" (page)="onPageChange($event)"
+    showFirstLastButtons></mat-paginator>

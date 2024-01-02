@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { firstValueFrom } from 'rxjs';
 import { NUMBER_ALBUMS_PER_PAGE } from 'src/app/common/constants';
 import { IPhoto } from 'src/app/common/interfaces';
@@ -18,6 +19,9 @@ export class AlbumsComponent implements OnInit {
   public areImagesLoading: boolean = true;
   public imagesLoading: boolean[] = [];
 
+  public pageSize: number = NUMBER_ALBUMS_PER_PAGE;
+  public pageIndex: number = 0;
+
   private rootFolderInfo: IGoogleDriveFields[] = [];
   private albumsInfo: IGoogleDriveFields[] = [];
 
@@ -28,7 +32,7 @@ export class AlbumsComponent implements OnInit {
   ) {}
 
   public async ngOnInit(): Promise<void> {
-    for (let i: number = 0; i < NUMBER_ALBUMS_PER_PAGE; i++) {
+    for (let i: number = 0; i < this.pageSize; i++) {
       this.imagesLoading.push(true);
     }
 
@@ -127,5 +131,14 @@ export class AlbumsComponent implements OnInit {
 
   public navigateTo(route: string): void {
     this.utilsService.navigateTo(route);
+  }
+
+  public onPageChange(event: PageEvent): void {
+    this.pageIndex = event.pageIndex;
+  }
+
+  public getPaginatedPhotos(): IPhoto[] {
+    const startIndex = this.pageIndex * this.pageSize;
+    return this.photos.slice(startIndex, startIndex + this.pageSize);
   }
 }
