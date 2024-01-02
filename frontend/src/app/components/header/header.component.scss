@@ -5,6 +5,16 @@
     background-color: #EEEEEE;
     width: 100%;
     height: 35vh; //we will need to review this later
+    position: relative;
+
+    .contact{
+        width: 100%;
+        top: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        position: absolute;
+    }
 
     .mat-mdc-progress-spinner {
         --mdc-circular-progress-active-indicator-color: lightgray;

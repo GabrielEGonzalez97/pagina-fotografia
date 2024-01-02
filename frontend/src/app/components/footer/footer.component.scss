@@ -1,0 +1,11 @@
+.footer-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 2rem 3rem;
+
+    .text-footer{
+        margin-right: 2vh;
+    }
+}
