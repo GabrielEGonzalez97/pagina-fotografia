@@ -1,9 +1,11 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { NUMBER_ALBUMS_PER_PAGE } from 'src/app/common/constants';
 import { IPhoto } from 'src/app/common/interfaces';
+import { AlbumService } from 'src/app/services/albums.service';
 import { HttpService } from 'src/app/services/http.service';
 import { IGoogleDriveFields } from 'src/app/services/interfaces';
+import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-albums', //forma de referenciar el componente en otros componentes
@@ -11,10 +13,6 @@ import { IGoogleDriveFields } from 'src/app/services/interfaces';
   styleUrls: ['./albums.component.scss'], //referencia del style scss
 })
 export class AlbumsComponent implements OnInit {
-  @Output() photosEmitter: EventEmitter<IPhoto[]> = new EventEmitter<
-    IPhoto[]
-  >();
-
   public firstPhotoByAlbum: Map<string, string> = new Map<string, string>(); // We need this for the moment when the user need to view a one specific
   public photos: IPhoto[] = [];
   public areImagesLoading: boolean = true;
@@ -23,7 +21,11 @@ export class AlbumsComponent implements OnInit {
   private rootFolderInfo: IGoogleDriveFields[] = [];
   private albumsInfo: IGoogleDriveFields[] = [];
 
-  constructor(private httpService: HttpService) {}
+  constructor(
+    private albumService: AlbumService,
+    private httpService: HttpService,
+    private utilsService: UtilsService
+  ) {}
 
   public async ngOnInit(): Promise<void> {
     for (let i: number = 0; i < NUMBER_ALBUMS_PER_PAGE; i++) {
@@ -54,7 +56,9 @@ export class AlbumsComponent implements OnInit {
                   this.firstPhotoByAlbum.set(albumInfo.id, photoUrl);
                   const newPhoto: IPhoto = {
                     photoUrl,
+                    photoCreatedTime: photos[0].createdTime,
                     album: {
+                      albumId: albumInfo.id,
                       albumName: albumInfo.name,
                       albumCreatedTime: albumInfo.createdTime,
                       photos: photos,
@@ -65,7 +69,7 @@ export class AlbumsComponent implements OnInit {
                   if (photosCount === this.albumsInfo.length) {
                     this.areImagesLoading = false;
                     this.photos = photosAux;
-                    this.photosEmitter.emit(this.photos);
+                    this.albumService.emitChange(this.photos);
                   }
                 });
               } else {
@@ -73,7 +77,7 @@ export class AlbumsComponent implements OnInit {
                 if (photosCount === this.albumsInfo.length) {
                   this.areImagesLoading = false;
                   this.photos = photosAux;
-                  this.photosEmitter.emit(this.photos);
+                  this.albumService.emitChange(this.photos);
                 }
               }
             });
@@ -119,5 +123,9 @@ export class AlbumsComponent implements OnInit {
         this.binaryHelper(photos, photo, midPoint + 1, uBound);
       }
     }
+  }
+
+  public navigateTo(route: string): void {
+    this.utilsService.navigateTo(route);
   }
 }

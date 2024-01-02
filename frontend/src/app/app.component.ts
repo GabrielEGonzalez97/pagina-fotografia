@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IPhoto } from './common/interfaces';
+import { AlbumService } from './services/albums.service';
 
 @Component({
   selector: 'app-root',
@@ -9,11 +10,11 @@ import { IPhoto } from './common/interfaces';
 export class AppComponent {
   public photos: IPhoto[] = [];
 
-  constructor() {}
+  constructor(private albumService: AlbumService) {}
 
-  public ngOnInit(): void {}
-
-  public updatePhotos(photos: IPhoto[]): void {
-    this.photos = photos;
+  public ngOnInit(): void {
+    this.albumService.photosEmitted$.subscribe((photos: IPhoto[]) => {
+      this.photos = photos;
+    });
   }
 }

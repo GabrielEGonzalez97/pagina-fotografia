@@ -1,1 +1,19 @@
-<p>photos works!</p>
+<div class="principal-container">
+    <div class="album-title">
+        <h2>{{ albumInfo?.name }}</h2>
+    </div>
+    <div class="photos-container">
+        <ng-container *ngIf="areImagesLoading">
+            <ng-container *ngFor="let imageLoading of imagesLoading">
+                <div class="photo">
+                    <mat-spinner></mat-spinner>
+                </div>
+            </ng-container>
+        </ng-container>
+        <ng-container *ngIf="!areImagesLoading">
+            <ng-container *ngFor="let photo of photos">
+                <img class="photo" [src]="photo.photoUrl">
+            </ng-container>
+        </ng-container>
+    </div>
+</div>

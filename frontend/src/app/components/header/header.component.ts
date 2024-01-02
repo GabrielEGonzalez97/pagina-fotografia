@@ -27,7 +27,9 @@ export class HeaderComponent implements OnChanges {
 
   public changeHeaderPicture(): void {
     if (this.photos && this.photos.length > 0) {
-      const randomIndex = Math.floor(Math.random() * this.photos.length);
+      const randomIndex: number = Math.floor(
+        Math.random() * this.photos.length
+      );
       this.photoToShow = this.photos[randomIndex];
     } else {
       this.photoToShow = null;

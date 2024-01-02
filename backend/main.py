@@ -86,6 +86,45 @@ def get_albums_info(root_folder_id: str):
     return files
 
 
+@app.get('/getAlbumInfo/<album_id>')
+def get_album_info(album_id: str):
+    try:
+        # Create drive api client
+        google_drive_service = GoogleDriveService().build()
+        files = []
+        page_token = None
+        while True:
+            # pylint: disable=maybe-no-member
+            query_to_search_for_albums = f"mimeType = 'application/vnd.google-apps.folder'"
+            response = (
+                google_drive_service.files()
+                .list(
+                    q=query_to_search_for_albums,
+                    spaces="drive",
+                    fields="nextPageToken, files(id, name, createdTime)",
+                    pageToken=page_token,
+                )
+                .execute()
+            )
+            for file in response.get("files", []):
+                # Process change
+                print(f'Found file: {file.get("name")}, {file.get("id")}')
+            files.extend(response.get("files", []))
+            page_token = response.get("nextPageToken", None)
+            if page_token is None:
+                break
+
+    except HttpError as error:
+        print(f"An error occurred: {error}")
+        files = None
+
+    file_to_return = None
+    for file in files:
+        if file['id'] == album_id:
+            file_to_return = file
+    return file_to_return
+
+
 @app.get('/getPhotosWithinAlbum/<album_id>')
 def get_photos_within_album(album_id: str):
     try:

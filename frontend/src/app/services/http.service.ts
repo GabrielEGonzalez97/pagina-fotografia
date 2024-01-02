@@ -21,6 +21,11 @@ export class HttpService {
     return this.http.get<IGoogleDriveFields[]>(endpointUrl);
   }
 
+  public getAlbumInfo(albumId: string): Observable<IGoogleDriveFields> {
+    const endpointUrl: string = `${BACKEND_API_URL}/getAlbumInfo/${albumId}`;
+    return this.http.get<IGoogleDriveFields>(endpointUrl);
+  }
+
   public getPhotosWithinAlbum(
     albumId: string
   ): Observable<IGoogleDriveFields[]> {
@@ -28,7 +33,7 @@ export class HttpService {
     return this.http.get<IGoogleDriveFields[]>(endpointUrl);
   }
 
-  public getPhotoById(photoId: string) {
+  public getPhotoById(photoId: string): Observable<ArrayBuffer> {
     const endpointUrl: string = `${BACKEND_API_URL}/getPhotoById/${photoId}`;
     return this.http.get(endpointUrl, {
       responseType: 'arraybuffer',

@@ -4,8 +4,8 @@
             <mat-icon>menu</mat-icon>
         </button>
         <div class="nav-buttons-menu" [ngClass]="{ 'show' : active }">
-            <a class="link-pages">Álbumes</a> <!--TODO: we need to do the back for this links-->
-            <a class="link-pages">Fotos</a>
+            <a class="link-pages" (click)="navigateTo('')">Álbumes</a>
+            <a class="link-pages" (click)="navigateTo('fotos')">Fotos</a>
             <input class="search" type="text" placeholder="buscar..." alt="searcher">
         </div>
     </div>

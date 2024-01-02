@@ -11,7 +11,8 @@
     <ng-container *ngIf="!areImagesLoading">
         <ng-container *ngFor="let photo of photos">
             <div class="column">
-                <div class="image-container image-container-with-content">
+                <div class="image-container image-container-with-content"
+                    (click)="navigateTo('album/' + photo.album.albumId)">
                     <img [src]="photo.photoUrl">
                     <div class="photo-legend">
                         <h4 class="album-name">{{photo.album.albumName}}</h4>
