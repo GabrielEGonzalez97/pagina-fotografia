@@ -4,7 +4,7 @@
     </div>
     <div class="photos-container">
         <ng-container *ngIf="areImagesLoading">
-            <ng-container *ngFor="let imageLoading of imagesLoading; let i = index;">
+            <ng-container *ngFor="let imageLoading of getPaginatedLoadingPhotos(); let i = index;">
                 <ng-container *ngIf="imageLoading">
                     <div class="photo">
                         <mat-spinner></mat-spinner>
@@ -16,9 +16,12 @@
             </ng-container>
         </ng-container>
         <ng-container *ngIf="!areImagesLoading">
-            <ng-container *ngFor="let photo of photos">
+            <ng-container *ngFor="let photo of getPaginatedPhotos()">
                 <img class="photo" [src]="photo.photoUrl">
             </ng-container>
         </ng-container>
     </div>
 </div>
+
+<mat-paginator [length]="photos.length" [pageSize]="pageSize" [pageIndex]="pageIndex" (page)="onPageChange($event)"
+    showFirstLastButtons></mat-paginator>

@@ -1,6 +1,6 @@
 <div class="albums-container">
     <ng-container *ngIf="areImagesLoading">
-        <ng-container *ngFor="let imageLoading of imagesLoading">
+        <ng-container *ngFor="let imageLoading of getPaginatedLoadingPhotos()">
             <div class="column">
                 <div class="image-container">
                     <mat-spinner></mat-spinner>

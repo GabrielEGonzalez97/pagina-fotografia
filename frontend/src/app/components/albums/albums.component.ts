@@ -95,6 +95,7 @@ export class AlbumsComponent implements OnInit {
     if (photos.length === 0) {
       photos.push(photo);
       this.imagesLoading[0] = false;
+      this.imagesLoading.push(true);
     } else {
       this.binaryHelper(photos, photo, 0, photos.length - 1);
     }
@@ -111,10 +112,10 @@ export class AlbumsComponent implements OnInit {
         photo.album.albumCreatedTime < photos[lBound].album.albumCreatedTime
       ) {
         photos.splice(lBound, 0, photo);
-        this.imagesLoading[lBound] = false;
+        this.imagesLoading.splice(lBound, 0, false);
       } else {
         photos.splice(lBound + 1, 0, photo);
-        this.imagesLoading[lBound + 1] = false;
+        this.imagesLoading.splice(lBound + 1, 0, false);
       }
     } else {
       const midPoint: number = Math.floor((uBound - lBound) / 2) + lBound;
@@ -137,8 +138,13 @@ export class AlbumsComponent implements OnInit {
     this.pageIndex = event.pageIndex;
   }
 
+  public getPaginatedLoadingPhotos(): boolean[] {
+    const startIndex: number = this.pageIndex * this.pageSize;
+    return this.imagesLoading.slice(startIndex, startIndex + this.pageSize);
+  }
+
   public getPaginatedPhotos(): IPhoto[] {
-    const startIndex = this.pageIndex * this.pageSize;
+    const startIndex: number = this.pageIndex * this.pageSize;
     return this.photos.slice(startIndex, startIndex + this.pageSize);
   }
 }

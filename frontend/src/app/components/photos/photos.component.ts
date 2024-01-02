@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { NUMBER_PHOTOS_PER_PAGE } from 'src/app/common/constants';
@@ -16,6 +17,9 @@ export class PhotosComponent {
   public areImagesLoading: boolean = true;
   public imagesLoading: boolean[] = [];
 
+  public pageSize: number = NUMBER_PHOTOS_PER_PAGE;
+  public pageIndex: number = 0;
+
   public albumInfo: IGoogleDriveFields | null = null;
 
   private albumId: string = '';
@@ -30,7 +34,7 @@ export class PhotosComponent {
       this.activatedRoute.snapshot.paramMap.get('albumId');
     this.albumId = albumIdParamValue ? albumIdParamValue : '';
 
-    for (let i: number = 0; i < NUMBER_PHOTOS_PER_PAGE; i++) {
+    for (let i: number = 0; i < this.pageSize; i++) {
       this.imagesLoading.push(true);
     }
 
@@ -63,6 +67,7 @@ export class PhotosComponent {
 
                   this.photos.push(newPhoto);
                   this.imagesLoading[this.photos.length - 1] = false;
+                  this.imagesLoading.push(true);
                   photosCount += 1;
 
                   if (photosCount === photosWithinAlbum.length) {
@@ -104,6 +109,7 @@ export class PhotosComponent {
                       };
                       this.photos.push(newPhoto);
                       this.imagesLoading[this.photos.length - 1] = false;
+                      this.imagesLoading.push(true);
                       photosCount += 1;
 
                       if (photosCount === totalPhotosCount) {
@@ -118,5 +124,19 @@ export class PhotosComponent {
         }
       );
     }
+  }
+
+  public onPageChange(event: PageEvent): void {
+    this.pageIndex = event.pageIndex;
+  }
+
+  public getPaginatedLoadingPhotos(): boolean[] {
+    const startIndex: number = this.pageIndex * this.pageSize;
+    return this.imagesLoading.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  public getPaginatedPhotos(): IPhoto[] {
+    const startIndex: number = this.pageIndex * this.pageSize;
+    return this.photos.slice(startIndex, startIndex + this.pageSize);
   }
 }
