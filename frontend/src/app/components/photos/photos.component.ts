@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
@@ -6,6 +7,7 @@ import { NUMBER_PHOTOS_PER_PAGE } from 'src/app/common/constants';
 import { IPhoto } from 'src/app/common/interfaces';
 import { HttpService } from 'src/app/services/http.service';
 import { IGoogleDriveFields } from 'src/app/services/interfaces';
+import { PhotoComponent } from '../photo/photo.component';
 
 @Component({
   selector: 'app-photos',
@@ -26,6 +28,7 @@ export class PhotosComponent {
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private dialog: MatDialog,
     private httpService: HttpService
   ) {}
 
@@ -55,6 +58,7 @@ export class PhotosComponent {
                   const blob: Blob = new Blob([photo]);
                   const photoUrl: string = window.URL.createObjectURL(blob);
                   const newPhoto: IPhoto = {
+                    photoName: photoWithinAlbum.name,
                     photoUrl,
                     photoCreatedTime: photoWithinAlbum.createdTime,
                     album: {
@@ -98,6 +102,7 @@ export class PhotosComponent {
                       const blob: Blob = new Blob([photo]);
                       const photoUrl: string = window.URL.createObjectURL(blob);
                       const newPhoto: IPhoto = {
+                        photoName: photoWithinAlbum.name,
                         photoUrl,
                         photoCreatedTime: photoWithinAlbum.createdTime,
                         album: {
@@ -138,5 +143,13 @@ export class PhotosComponent {
   public getPaginatedPhotos(): IPhoto[] {
     const startIndex: number = this.pageIndex * this.pageSize;
     return this.photos.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  public openPhoto(photo: IPhoto): void {
+    const dialogRef: MatDialogRef<PhotoComponent, any> =
+      this.dialog.open(PhotoComponent);
+
+    let instance: PhotoComponent = dialogRef.componentInstance;
+    instance.photo = photo;
   }
 }

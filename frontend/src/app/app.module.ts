@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -14,6 +15,7 @@ import { ContactComponent } from './components/contact/contact.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { PhotoComponent } from './components/photo/photo.component';
 import { PhotosComponent } from './components/photos/photos.component';
 
 @NgModule({
@@ -25,6 +27,7 @@ import { PhotosComponent } from './components/photos/photos.component';
     NavbarComponent,
     PhotosComponent,
     ContactComponent,
+    PhotoComponent,
   ],
   imports: [
     BrowserModule,
@@ -32,6 +35,7 @@ import { PhotosComponent } from './components/photos/photos.component';
     HttpClientModule,
     CommonModule,
     BrowserAnimationsModule,
+    MatDialogModule,
     MatIconModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
