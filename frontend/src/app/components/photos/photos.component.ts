@@ -35,75 +35,88 @@ export class PhotosComponent {
     }
 
     let photosCount: number = 0;
-    let photosAux: IPhoto[] = [];
-    await firstValueFrom(this.httpService.getAlbumInfo(this.albumId)).then(
-      async (albumInfo: IGoogleDriveFields) => {
-        this.albumInfo = albumInfo;
-        await firstValueFrom(
-          this.httpService.getPhotosWithinAlbum(this.albumId)
-        ).then(async (photosWithinAlbum: IGoogleDriveFields[]) => {
-          photosWithinAlbum.forEach(
-            async (photoWithinAlbum: IGoogleDriveFields) => {
+    let totalPhotosCount: number = 0;
+    if (this.albumId) {
+      await firstValueFrom(this.httpService.getAlbumInfo(this.albumId)).then(
+        async (albumInfo: IGoogleDriveFields) => {
+          this.albumInfo = albumInfo;
+          await firstValueFrom(
+            this.httpService.getPhotosWithinAlbum(this.albumId)
+          ).then(async (photosWithinAlbum: IGoogleDriveFields[]) => {
+            photosWithinAlbum.forEach(
+              async (photoWithinAlbum: IGoogleDriveFields) => {
+                await firstValueFrom(
+                  this.httpService.getPhotoById(photoWithinAlbum.id)
+                ).then((photo: ArrayBuffer) => {
+                  const blob: Blob = new Blob([photo]);
+                  const photoUrl: string = window.URL.createObjectURL(blob);
+                  const newPhoto: IPhoto = {
+                    photoUrl,
+                    photoCreatedTime: photoWithinAlbum.createdTime,
+                    album: {
+                      albumId: albumInfo.id,
+                      albumName: albumInfo.name,
+                      albumCreatedTime: albumInfo.createdTime,
+                      photos: photosWithinAlbum,
+                    },
+                  };
+
+                  this.photos.push(newPhoto);
+                  this.imagesLoading[this.photos.length - 1] = false;
+                  photosCount += 1;
+
+                  if (photosCount === photosWithinAlbum.length) {
+                    this.areImagesLoading = false;
+                  }
+                });
+              }
+            );
+          });
+        }
+      );
+    } else {
+      await firstValueFrom(this.httpService.getRootFolder()).then(
+        async (rootFolderInfo: IGoogleDriveFields[]) => {
+          await firstValueFrom(
+            this.httpService.getAlbumsInfo(rootFolderInfo[0].id)
+          ).then(async (albumsInfo: IGoogleDriveFields[]) => {
+            albumsInfo.forEach(async (albumInfo: IGoogleDriveFields) => {
               await firstValueFrom(
-                this.httpService.getPhotoById(photoWithinAlbum.id)
-              ).then((photo: ArrayBuffer) => {
-                const blob: Blob = new Blob([photo]);
-                const photoUrl: string = window.URL.createObjectURL(blob);
-                const newPhoto: IPhoto = {
-                  photoUrl,
-                  photoCreatedTime: photoWithinAlbum.createdTime,
-                  album: {
-                    albumId: albumInfo.id,
-                    albumName: albumInfo.name,
-                    albumCreatedTime: albumInfo.createdTime,
-                    photos: photosWithinAlbum,
-                  },
-                };
-                this.binaryInsertion(photosAux, newPhoto);
-                photosCount += 1;
-                if (photosCount === photosWithinAlbum.length) {
-                  this.areImagesLoading = false;
-                  this.photos = photosAux;
-                }
+                this.httpService.getPhotosWithinAlbum(albumInfo.id)
+              ).then(async (photosWithinAlbum: IGoogleDriveFields[]) => {
+                totalPhotosCount += photosWithinAlbum.length;
+                photosWithinAlbum.forEach(
+                  async (photoWithinAlbum: IGoogleDriveFields) => {
+                    await firstValueFrom(
+                      this.httpService.getPhotoById(photoWithinAlbum.id)
+                    ).then((photo: ArrayBuffer) => {
+                      const blob: Blob = new Blob([photo]);
+                      const photoUrl: string = window.URL.createObjectURL(blob);
+                      const newPhoto: IPhoto = {
+                        photoUrl,
+                        photoCreatedTime: photoWithinAlbum.createdTime,
+                        album: {
+                          albumId: albumInfo.id,
+                          albumName: albumInfo.name,
+                          albumCreatedTime: albumInfo.createdTime,
+                          photos: photosWithinAlbum,
+                        },
+                      };
+                      this.photos.push(newPhoto);
+                      this.imagesLoading[this.photos.length - 1] = false;
+                      photosCount += 1;
+
+                      if (photosCount === totalPhotosCount) {
+                        this.areImagesLoading = false;
+                      }
+                    });
+                  }
+                );
               });
-            }
-          );
-        });
-      }
-    );
-  }
-
-  private binaryInsertion(photos: IPhoto[], photo: IPhoto): void {
-    if (photos.length === 0) {
-      photos.push(photo);
-      this.imagesLoading[0] = false;
-    } else {
-      this.binaryHelper(photos, photo, 0, photos.length - 1);
-    }
-  }
-
-  private binaryHelper(
-    photos: IPhoto[],
-    photo: IPhoto,
-    lBound: number,
-    uBound: number
-  ): void {
-    if (uBound <= lBound) {
-      if (photo.photoCreatedTime < photos[lBound].photoCreatedTime) {
-        photos.splice(lBound, 0, photo);
-        this.imagesLoading[lBound] = false;
-      } else {
-        photos.splice(lBound + 1, 0, photo);
-        this.imagesLoading[lBound + 1] = false;
-      }
-    } else {
-      const midPoint: number = Math.floor((uBound - lBound) / 2) + lBound;
-
-      if (photo.photoCreatedTime < photos[midPoint].photoCreatedTime) {
-        this.binaryHelper(photos, photo, lBound, midPoint);
-      } else {
-        this.binaryHelper(photos, photo, midPoint + 1, uBound);
-      }
+            });
+          });
+        }
+      );
     }
   }
 }

@@ -4,10 +4,15 @@
     </div>
     <div class="photos-container">
         <ng-container *ngIf="areImagesLoading">
-            <ng-container *ngFor="let imageLoading of imagesLoading">
-                <div class="photo">
-                    <mat-spinner></mat-spinner>
-                </div>
+            <ng-container *ngFor="let imageLoading of imagesLoading; let i = index;">
+                <ng-container *ngIf="imageLoading">
+                    <div class="photo">
+                        <mat-spinner></mat-spinner>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="!imageLoading">
+                    <img class="photo" [src]="photos[i].photoUrl">
+                </ng-container>
             </ng-container>
         </ng-container>
         <ng-container *ngIf="!areImagesLoading">
