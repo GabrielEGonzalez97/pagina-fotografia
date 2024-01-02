@@ -8,6 +8,7 @@ export interface IAlbum {
 }
 
 export interface IPhoto {
+  photoName: string;
   photoUrl: string;
   photoCreatedTime: string;
   album: IAlbum;

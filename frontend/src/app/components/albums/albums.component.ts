@@ -59,6 +59,7 @@ export class AlbumsComponent implements OnInit {
                   const photoUrl: string = window.URL.createObjectURL(blob);
                   this.firstPhotoByAlbum.set(albumInfo.id, photoUrl);
                   const newPhoto: IPhoto = {
+                    photoName: photos[0].name,
                     photoUrl,
                     photoCreatedTime: photos[0].createdTime,
                     album: {
