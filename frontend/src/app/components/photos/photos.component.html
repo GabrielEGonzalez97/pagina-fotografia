@@ -11,13 +11,13 @@
                     </div>
                 </ng-container>
                 <ng-container *ngIf="!imageLoading">
-                    <img class="photo" [src]="photos[i].photoUrl" (click)="openPhoto(photos[i])">
+                    <img class="photo photo-with-content" [src]="photos[i].photoUrl" (click)="openPhoto(photos[i])">
                 </ng-container>
             </ng-container>
         </ng-container>
         <ng-container *ngIf="!areImagesLoading">
             <ng-container *ngFor="let photo of getPaginatedPhotos()">
-                <img class="photo" [src]="photo.photoUrl" (click)="openPhoto(photo)">
+                <img class="photo photo-with-content" [src]="photo.photoUrl" (click)="openPhoto(photo)">
             </ng-container>
         </ng-container>
     </div>

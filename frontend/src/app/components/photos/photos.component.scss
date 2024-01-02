@@ -48,5 +48,10 @@
                 --mdc-circular-progress-active-indicator-color: lightgray;
             }
         }
+
+        .photo-with-content:hover {
+            cursor: pointer;
+            opacity: 0.8;
+        }
     }
 }
