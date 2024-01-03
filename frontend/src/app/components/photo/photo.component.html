@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>{{ photo?.photoName }}</h2>
-<mat-dialog-content class="mat-typography">
-  <ng-container *ngIf="photo">
+<mat-dialog-content class="mat-typography" oncontextmenu='return false' >
+  <ng-container *ngIf="photo" >
     <img class="photo" [src]="photo.photoUrl">
   </ng-container>
 </mat-dialog-content>

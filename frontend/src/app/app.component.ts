@@ -9,6 +9,20 @@ import { AlbumService } from './services/albums.service';
 })
 export class AppComponent {
   public photos: IPhoto[] = [];
+  
+
+  /*
+  document.getElementsByClassName('page-container').oncontextmenu = function(){return false}
+
+  public cancelRightClick(): void {
+    document.addEventListener("contextmenu", function(e){
+      e.preventDefault();
+    }, false)
+  }
+  
+  app.addEventListener('click', () => {
+    alert('click izquierdo')
+  })*/
 
   constructor(private albumService: AlbumService) {}
 
