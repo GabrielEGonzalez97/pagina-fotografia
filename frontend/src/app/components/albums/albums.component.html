@@ -1,4 +1,4 @@
-<div class="albums-container" oncontextmenu='return false'>
+<div class="albums-container">
     <ng-container *ngIf="areImagesLoading">
         <ng-container *ngFor="let imageLoading of getPaginatedLoadingPhotos()">
             <div class="column">
@@ -26,4 +26,4 @@
 </div>
 
 <mat-paginator [length]="photos.length" [pageSize]="pageSize" [pageIndex]="pageIndex" (page)="onPageChange($event)"
-    showFirstLastButtons oncontextmenu='return false'></mat-paginator>
+    showFirstLastButtons></mat-paginator>
