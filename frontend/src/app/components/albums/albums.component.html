@@ -1,4 +1,4 @@
-<div class="albums-container">
+<div class="albums-container" oncontextmenu='return false'>
     <ng-container *ngIf="areImagesLoading">
         <ng-container *ngFor="let imageLoading of getPaginatedLoadingPhotos()">
             <div class="column">
@@ -9,7 +9,7 @@
         </ng-container>
     </ng-container>
 
-    <ng-container *ngIf="!areImagesLoading">
+    <ng-container *ngIf="!areImagesLoading" oncontextmenu='return false'>
         <ng-container *ngFor="let photo of getPaginatedPhotos()">
             <div class="column">
                 <div class="image-container image-container-with-content"

@@ -1,6 +1,6 @@
-<div class="header-container" (click)="changeHeaderPicture()">
+<div class="header-container" (click)="changeHeaderPicture()" oncontextmenu='return false'>
     <app-contact class="contact"></app-contact>
-    <ng-container *ngIf="!photoToShow">
+    <ng-container *ngIf="!photoToShow" >
         <mat-spinner></mat-spinner>
     </ng-container>
     <ng-container *ngIf="photoToShow">

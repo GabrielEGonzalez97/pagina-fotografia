@@ -2,7 +2,7 @@
     <div class="album-title">
         <h2>{{ albumInfo?.name }}</h2>
     </div>
-    <div class="photos-container">
+    <div class="photos-container" oncontextmenu='return false'>
         <ng-container *ngIf="areImagesLoading">
             <ng-container *ngFor="let imageLoading of getPaginatedLoadingPhotos(); let i = index;">
                 <ng-container *ngIf="imageLoading">
