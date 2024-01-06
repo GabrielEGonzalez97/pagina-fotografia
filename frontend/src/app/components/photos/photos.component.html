@@ -1,27 +1,50 @@
-<div class="principal-container" >
+<div class="principal-container">
     <div class="album-title">
-        <h2>{{ albumInfo?.name }}</h2>
+        <h2>{{ albumInfo?.albumName }}</h2>
     </div>
     <div class="photos-container" oncontextmenu='return false'>
-        <ng-container *ngIf="areImagesLoading">
-            <ng-container *ngFor="let imageLoading of getPaginatedLoadingPhotos(); let i = index;">
-                <ng-container *ngIf="imageLoading">
-                    <div class="photo">
-                        <mat-spinner></mat-spinner>
+        <ng-container *ngIf="arePhotosLoading">
+            <ng-container *ngFor="let photoLoading of getPaginatedLoadingPhotos(); let i = index;">
+                <ng-container *ngIf="photoLoading">
+                    <div class="photo-container">
+                        <div class="photo">
+                            <mat-spinner></mat-spinner>
+                        </div>
                     </div>
                 </ng-container>
-                <ng-container *ngIf="!imageLoading">
-                    <img class="photo photo-with-content" [src]="photos[i].photoUrl" (click)="openPhoto(photos[i])">
+
+                <ng-container *ngIf="!photoLoading">
+                    <ng-container [ngTemplateOutlet]="photoTemplate"
+                        [ngTemplateOutletContext]="{photo: photos[i]}"></ng-container>
                 </ng-container>
             </ng-container>
         </ng-container>
-        <ng-container *ngIf="!areImagesLoading">
+
+        <ng-container *ngIf="!arePhotosLoading">
             <ng-container *ngFor="let photo of getPaginatedPhotos()">
-                <img class="photo photo-with-content" [src]="photo.photoUrl" (click)="openPhoto(photo)">
+                <ng-container [ngTemplateOutlet]="photoTemplate"
+                    [ngTemplateOutletContext]="{photo: photo}"></ng-container>
+            </ng-container>
+
+            <ng-container *ngIf="photosToShow.length === 0">
+                <div class="image-not-found-container">
+                    <img src="assets/images/Image-not-found.png">
+                </div>
+                <p>No se encontraron fotos</p> <!--TODO: We need to review this later-->
             </ng-container>
         </ng-container>
     </div>
 </div>
 
-<mat-paginator class="pagination" [length]="photos.length" [pageSize]="pageSize" [pageIndex]="pageIndex" (page)="onPageChange($event)"
-    showFirstLastButtons></mat-paginator>
+<mat-paginator class="pagination" [length]="photosToShow.length" [pageSize]="pageSize" [pageIndex]="pageIndex"
+    (page)="onPageChange($event)" showFirstLastButtons></mat-paginator>
+
+<ng-template #photoTemplate let-photo='photo'>
+    <div class="photo-container photo-container-with-content" (click)="openPhoto(photo)"
+        (mouseover)="photo.showLegend = true" (mouseout)="photo.showLegend = false">
+        <img class="photo" [src]="photo.photoUrl">
+        <div class="photo-legend" [ngClass]="{'show-legend': photo.showLegend}">
+            <h4 class="photo-name">{{photo.photoName}}</h4>
+        </div>
+    </div>
+</ng-template>

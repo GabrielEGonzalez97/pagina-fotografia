@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NavBarService } from 'src/app/services/navbar.service';
 import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
@@ -9,7 +10,10 @@ import { UtilsService } from 'src/app/services/utils.service';
 export class NavbarComponent implements OnInit {
   public active: boolean = false;
 
-  constructor(private utilsService: UtilsService) {}
+  constructor(
+    private navBarService: NavBarService,
+    private utilsService: UtilsService
+  ) {}
 
   public ngOnInit(): void {}
 
@@ -19,5 +23,9 @@ export class NavbarComponent implements OnInit {
 
   public navigateTo(route: string): void {
     this.utilsService.navigateTo(route);
+  }
+
+  public onInputChange(event: any): void {
+    this.navBarService.emitFilterChange(event.target.value);
   }
 }
