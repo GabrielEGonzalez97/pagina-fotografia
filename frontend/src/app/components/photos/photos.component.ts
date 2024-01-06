@@ -74,6 +74,7 @@ export class PhotosComponent {
                 await this.utilsService
                   .getPhoto(photoWithinAlbum, this.albumInfo)
                   .then((photo: IPhoto) => {
+                    photo.showLegend = false;
                     this.photos.push(photo);
                     this.photosLoading[this.photos.length - 1] = false;
                     this.photosLoading.push(true);
@@ -110,6 +111,7 @@ export class PhotosComponent {
                     await this.utilsService
                       .getPhoto(photoWithinAlbum, album)
                       .then((photo: IPhoto) => {
+                        photo.showLegend = false;
                         this.photos.push(photo);
                         this.photosLoading[this.photos.length - 1] = false;
                         this.photosLoading.push(true);

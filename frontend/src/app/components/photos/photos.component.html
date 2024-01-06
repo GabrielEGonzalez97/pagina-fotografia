@@ -13,23 +13,15 @@
                     </div>
                 </ng-container>
                 <ng-container *ngIf="!imageLoading">
-                    <div class="photo-container">
-                        <img class="photo photo-with-content" [src]="photos[i].photoUrl" (click)="openPhoto(photos[i])">
-                        <div class="photo-legend">
-                            <h4 class="album-name">{{photos[i].photoName}}</h4>
-                        </div>
-                    </div>
+                    <ng-container [ngTemplateOutlet]="photoTemplate"
+                        [ngTemplateOutletContext]="{photo: photos[i]}"></ng-container>
                 </ng-container>
             </ng-container>
         </ng-container>
         <ng-container *ngIf="!arePhotosLoading">
             <ng-container *ngFor="let photo of getPaginatedPhotos()">
-                <div class="photo-container">
-                    <img class="photo photo-with-content" [src]="photo.photoUrl" (click)="openPhoto(photo)">
-                    <div class="photo-legend">
-                        <h4 class="album-name">{{photo.photoName}}</h4>
-                    </div>
-                </div>
+                <ng-container [ngTemplateOutlet]="photoTemplate"
+                    [ngTemplateOutletContext]="{photo: photo}"></ng-container>
             </ng-container>
 
             <ng-container *ngIf="photosToShow.length === 0">
@@ -42,5 +34,14 @@
     </div>
 </div>
 
-<mat-paginator [length]="photosToShow.length" [pageSize]="pageSize" [pageIndex]="pageIndex" (page)="onPageChange($event)"
-    showFirstLastButtons></mat-paginator>
+<mat-paginator [length]="photosToShow.length" [pageSize]="pageSize" [pageIndex]="pageIndex"
+    (page)="onPageChange($event)" showFirstLastButtons></mat-paginator>
+
+<ng-template #photoTemplate let-photo='photo'>
+    <div class="photo-container" (mouseover)="photo.showLegend = true" (mouseout)="photo.showLegend = false">
+        <img class="photo photo-with-content" [src]="photo.photoUrl" (click)="openPhoto(photo)">
+        <div class="photo-legend" [ngClass]="{'show-legend': photo.showLegend}">
+            <h4 class="photo-name">{{photo.photoName}}</h4>
+        </div>
+    </div>
+</ng-template>
