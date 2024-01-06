@@ -4,15 +4,15 @@
     </div>
     <div class="photos-container">
         <ng-container *ngIf="arePhotosLoading">
-            <ng-container *ngFor="let imageLoading of getPaginatedLoadingPhotos(); let i = index;">
-                <ng-container *ngIf="imageLoading">
+            <ng-container *ngFor="let photoLoading of getPaginatedLoadingPhotos(); let i = index;">
+                <ng-container *ngIf="photoLoading">
                     <div class="photo-container">
                         <div class="photo">
                             <mat-spinner></mat-spinner>
                         </div>
                     </div>
                 </ng-container>
-                <ng-container *ngIf="!imageLoading">
+                <ng-container *ngIf="!photoLoading">
                     <ng-container [ngTemplateOutlet]="photoTemplate"
                         [ngTemplateOutletContext]="{photo: photos[i]}"></ng-container>
                 </ng-container>
@@ -25,7 +25,7 @@
             </ng-container>
 
             <ng-container *ngIf="photosToShow.length === 0">
-                <div class="image-container">
+                <div class="image-not-found-container">
                     <img src="assets/images/Image-not-found.png">
                 </div>
                 <p>No se encontraron fotos</p> <!--TODO: We need to review this later-->
