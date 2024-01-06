@@ -22,7 +22,7 @@
         width: calc(100% * 1 - 1rem);
     }
 
-    .image-container {
+    .photo-container {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -44,7 +44,10 @@
             position: absolute;
             left: 0;
             bottom: 0;
-            margin: 1rem;
+            width: calc(100% - 2rem);
+            padding: 1rem;
+            background-color: #01161e;
+            opacity: 0.6;
 
             .album-name {
                 margin-bottom: 0.5rem !important;
@@ -59,7 +62,7 @@
         }
     }
 
-    .image-container-with-content:hover {
+    .photo-container-with-content:hover {
         cursor: pointer;
         opacity: 0.8;
     }
