@@ -8,6 +8,9 @@
     font-family: sans-serif; //if we will change the color of the background, we need to verify the color of the strings
     background-color: #7B8CDE;
 
+    .page-content {
+        position: relative;
+    }
 }
 
 :host(body) {

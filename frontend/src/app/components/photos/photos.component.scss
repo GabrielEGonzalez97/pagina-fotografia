@@ -13,6 +13,25 @@
         text-align: center;
     }
 
+    .sort-icon-container {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 24px;
+        height: 24px;
+        margin: 1rem;
+    
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
+    
+    .sort-icon-container:hover {
+        cursor: pointer;
+        opacity: 0.75;
+    }
+
     .photos-container {
         display: flex;
         flex-wrap: wrap;

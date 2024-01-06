@@ -28,6 +28,8 @@ export class AlbumsComponent implements OnInit {
   private albumsInfo: IGoogleDriveFields[] = [];
   private nameOfTheAlbumToSearch: string = '';
 
+  private sortAscending: boolean = true;
+
   constructor(
     private albumService: AlbumService,
     private httpService: HttpService,
@@ -119,5 +121,21 @@ export class AlbumsComponent implements OnInit {
     }
 
     return this.photosToShow.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  public sortPhotosByCreatedTime(): void {
+    this.photos = this.photos.sort((a: IPhoto, b: IPhoto) => {
+      const dateA: Date = new Date(a.album.albumCreatedTime);
+      const dateB: Date = new Date(b.album.albumCreatedTime);
+
+      if (this.sortAscending) {
+        return dateA.getTime() - dateB.getTime();
+      } else {
+        return dateB.getTime() - dateA.getTime();
+      }
+    });
+
+    this.sortAscending = !this.sortAscending;
+    this.pageIndex = 0;
   }
 }

@@ -31,6 +31,8 @@ export class PhotosComponent {
   private albumIdRouteParameter: string = '';
   private nameOfThePhotoToSearch: string = '';
 
+  private sortAscending: boolean = true;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private dialog: MatDialog,
@@ -162,5 +164,21 @@ export class PhotosComponent {
 
     const instance: PhotoComponent = dialogRef.componentInstance;
     instance.photo = photo;
+  }
+
+  public sortPhotosByCreatedTime(): void {
+    this.photos = this.photos.sort((a: IPhoto, b: IPhoto) => {
+      const dateA: Date = new Date(a.photoCreatedTime);
+      const dateB: Date = new Date(b.photoCreatedTime);
+
+      if (this.sortAscending) {
+        return dateA.getTime() - dateB.getTime();
+      } else {
+        return dateB.getTime() - dateA.getTime();
+      }
+    });
+
+    this.sortAscending = !this.sortAscending;
+    this.pageIndex = 0;
   }
 }
