@@ -2,7 +2,7 @@
     <div class="album-title">
         <h2>{{ albumInfo?.albumName }}</h2>
     </div>
-    <div class="photos-container">
+    <div class="photos-container" oncontextmenu='return false'>
         <ng-container *ngIf="arePhotosLoading">
             <ng-container *ngFor="let photoLoading of getPaginatedLoadingPhotos(); let i = index;">
                 <ng-container *ngIf="photoLoading">
@@ -36,7 +36,7 @@
     </div>
 </div>
 
-<mat-paginator [length]="photosToShow.length" [pageSize]="pageSize" [pageIndex]="pageIndex"
+<mat-paginator class="pagination" [length]="photosToShow.length" [pageSize]="pageSize" [pageIndex]="pageIndex"
     (page)="onPageChange($event)" showFirstLastButtons></mat-paginator>
 
 <ng-template #photoTemplate let-photo='photo'>
