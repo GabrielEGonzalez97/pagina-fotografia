@@ -1,3 +1,8 @@
+<div class="sort-icon-container" matTooltip="Ordenar por fecha de creación" matTooltipPosition="left"
+    (click)="sortPhotosByCreatedTime()">
+    <mat-icon>sort_by_alpha</mat-icon>
+</div>
+
 <div class="albums-container" oncontextmenu='return false'>
     <ng-container *ngIf="arePhotosLoading">
         <ng-container *ngFor="let photoLoading of getPaginatedLoadingPhotos(); let i = index;">
