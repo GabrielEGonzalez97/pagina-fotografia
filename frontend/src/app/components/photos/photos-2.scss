@@ -1,16 +1,16 @@
 .principal-container {
     display: flex;
     flex-direction: column;
-    width: auto;
-    height: auto;
-    margin: 2rem 3rem;
+    width: 100%;
+    //max-width: 1500px;
+    //height: 100vh;
+    //margin: 2rem 3rem;
+    margin-top: 1.5rem;
 
     .album-title {
-        display: flex;
         color: black;
         font-weight: bold;
         font-family: Helvetica;
-        text-align: center;
     }
 
     .sort-icon-container {
@@ -35,27 +35,28 @@
     .photos-container {
         display: flex;
         flex-wrap: wrap;
-        flex-direction: row;
-        width: auto;
-        height: auto;
+        flex-direction: column;
+        aspect-ratio: 4/3;
+
 
         .photo-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
             position: relative;
-            overflow: hidden;
-            width: calc(100% / 6 - 1rem);
-            height: auto;
+            width: calc(100% / 4 - 1rem);
             margin: 0.5rem;
+            //max-width: 1500px;
+            //height: 100%;
+            //column-count: 6;
+            //box-sizing: inherit;
             aspect-ratio: 4/3;
 
             @media screen and (max-width: 1024px) {
                 width: calc(100% / 3 - 1rem);
+                //column-count: 3;
             }
 
             @media screen and (max-width: 768px) {
                 width: calc(100% - 1rem);
+                //column-count: 1;
             }
 
             .photo {
@@ -65,6 +66,9 @@
                 justify-content: center;
                 align-items: center;
                 background-color: #eeeeee;
+                overflow-clip-margin: content-box;
+                overflow: clip;
+                
 
                 .mat-mdc-progress-spinner {
                     --mdc-circular-progress-active-indicator-color: lightgray;
@@ -117,9 +121,9 @@
     }
 }
 
-.pagination{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #7B8CDE;
-}
+    .pagination{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #7B8CDE;
+    }
