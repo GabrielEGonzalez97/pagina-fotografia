@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { NUMBER_PHOTOS_PER_PAGE } from 'src/app/common/constants';
 import { IAlbum, IPhoto } from 'src/app/common/interfaces';
+import { AlbumService } from 'src/app/services/albums.service';
 import { HttpService } from 'src/app/services/http.service';
 import { IGoogleDriveFields } from 'src/app/services/interfaces';
 import { NavBarService } from 'src/app/services/navbar.service';
@@ -35,6 +36,7 @@ export class PhotosComponent {
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private albumService: AlbumService,
     private dialog: MatDialog,
     private httpService: HttpService,
     private navBarService: NavBarService,
@@ -80,6 +82,7 @@ export class PhotosComponent {
                     this.photos.push(photo);
                     this.photosLoading[this.photos.length - 1] = false;
                     this.photosLoading.push(true);
+                    this.albumService.emitChange(this.photos);
                     photosCount += 1;
 
                     if (photosCount === photosWithinAlbum.length) {
@@ -117,6 +120,7 @@ export class PhotosComponent {
                         this.photos.push(photo);
                         this.photosLoading[this.photos.length - 1] = false;
                         this.photosLoading.push(true);
+                        this.albumService.emitChange(this.photos);
                         photosCount += 1;
 
                         if (photosCount === totalPhotosCount) {

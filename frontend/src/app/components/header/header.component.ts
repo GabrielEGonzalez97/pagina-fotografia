@@ -21,7 +21,9 @@ export class HeaderComponent implements OnChanges {
       changes['photos'].currentValue &&
       changes['photos'].currentValue.length > 0
     ) {
-      this.changeHeaderPicture();
+      if (!this.photoToShow) {
+        this.changeHeaderPicture();
+      }
     }
   }
 
