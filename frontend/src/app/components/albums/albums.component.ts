@@ -73,11 +73,11 @@ export class AlbumsComponent implements OnInit {
                     this.photos.push(photo);
                     this.photosLoading[this.photos.length - 1] = false;
                     this.photosLoading.push(true);
+                    this.albumService.emitChange(this.photos);
                     photosCount += 1;
 
                     if (photosCount === this.albumsInfo.length) {
                       this.arePhotosLoading = false;
-                      this.albumService.emitChange(this.photos);
                     }
                   });
               } else {
