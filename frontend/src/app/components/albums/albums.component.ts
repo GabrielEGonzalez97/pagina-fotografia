@@ -74,6 +74,7 @@ export class AlbumsComponent implements OnInit {
                     this.photosLoading[this.photos.length - 1] = false;
                     this.photosLoading.push(true);
                     this.albumService.emitChange(this.photos);
+                    this.getPaginatedPhotos();
                     photosCount += 1;
 
                     if (photosCount === this.albumsInfo.length) {
