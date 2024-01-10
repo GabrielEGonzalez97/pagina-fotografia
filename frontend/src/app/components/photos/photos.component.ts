@@ -50,6 +50,7 @@ export class PhotosComponent {
 
     this.navBarService.filterEmitted$.subscribe((filter: string) => {
       this.nameOfThePhotoToSearch = filter;
+      this.pageIndex = 0;
       this.getPaginatedPhotos();
     });
 
@@ -156,7 +157,6 @@ export class PhotosComponent {
           .toLowerCase()
           .includes(this.nameOfThePhotoToSearch.toLowerCase());
       });
-      this.pageIndex = 0;
     } else {
       this.photosToShow = this.photos;
     }

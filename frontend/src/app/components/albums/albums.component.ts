@@ -40,6 +40,7 @@ export class AlbumsComponent implements OnInit {
   public async ngOnInit(): Promise<void> {
     this.navBarService.filterEmitted$.subscribe((filter: string) => {
       this.nameOfTheAlbumToSearch = filter;
+      this.pageIndex = 0;
       this.getPaginatedPhotos();
     });
 
@@ -116,7 +117,6 @@ export class AlbumsComponent implements OnInit {
           .toLowerCase()
           .includes(this.nameOfTheAlbumToSearch.toLowerCase());
       });
-      this.pageIndex = 0;
     } else {
       this.photosToShow = this.photos;
     }
