@@ -1,8 +1,6 @@
 from __future__ import print_function
 
 import io
-import string    
-import random
 
 from flask import Flask, request, Response
 from googleapiclient.errors import HttpError
@@ -134,7 +132,7 @@ def get_photos_within_album(album_id: str):
         page_token = None
         while True:
             # pylint: disable=maybe-no-member
-            query_to_search_for_albums = f"mimeType='image/png' and '{album_id}' in parents"
+            query_to_search_for_albums = f"(mimeType='image/jpeg' or mimeType='image/png') and '{album_id}' in parents"
             response = (
                 google_drive_service.files()
                 .list(
@@ -179,7 +177,7 @@ def get_photo_by_id(photo_id):
         print(F'An error occurred: {error}')
         file = None
 
-    response = Response(file.getvalue(), content_type='image/png')
+    response = Response(file.getvalue(), content_type='image')
 
     return response
 
