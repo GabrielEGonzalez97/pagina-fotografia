@@ -40,6 +40,7 @@ export class AlbumsComponent implements OnInit {
   public async ngOnInit(): Promise<void> {
     this.navBarService.filterEmitted$.subscribe((filter: string) => {
       this.nameOfTheAlbumToSearch = filter;
+      this.pageIndex = 0;
       this.getPaginatedPhotos();
     });
 
@@ -74,6 +75,7 @@ export class AlbumsComponent implements OnInit {
                     this.photosLoading[this.photos.length - 1] = false;
                     this.photosLoading.push(true);
                     this.albumService.emitChange(this.photos);
+                    this.getPaginatedPhotos();
                     photosCount += 1;
 
                     if (photosCount === this.albumsInfo.length) {
@@ -115,7 +117,6 @@ export class AlbumsComponent implements OnInit {
           .toLowerCase()
           .includes(this.nameOfTheAlbumToSearch.toLowerCase());
       });
-      this.pageIndex = 0;
     } else {
       this.photosToShow = this.photos;
     }
