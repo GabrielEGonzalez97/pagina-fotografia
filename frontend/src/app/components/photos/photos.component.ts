@@ -50,6 +50,7 @@ export class PhotosComponent {
 
     this.navBarService.filterEmitted$.subscribe((filter: string) => {
       this.nameOfThePhotoToSearch = filter;
+      this.pageIndex = 0;
       this.getPaginatedPhotos();
     });
 
@@ -83,6 +84,7 @@ export class PhotosComponent {
                     this.photosLoading[this.photos.length - 1] = false;
                     this.photosLoading.push(true);
                     this.albumService.emitChange(this.photos);
+                    this.getPaginatedPhotos();
                     photosCount += 1;
 
                     if (photosCount === photosWithinAlbum.length) {
@@ -121,6 +123,7 @@ export class PhotosComponent {
                         this.photosLoading[this.photos.length - 1] = false;
                         this.photosLoading.push(true);
                         this.albumService.emitChange(this.photos);
+                        this.getPaginatedPhotos();
                         photosCount += 1;
 
                         if (photosCount === totalPhotosCount) {
@@ -154,7 +157,6 @@ export class PhotosComponent {
           .toLowerCase()
           .includes(this.nameOfThePhotoToSearch.toLowerCase());
       });
-      this.pageIndex = 0;
     } else {
       this.photosToShow = this.photos;
     }

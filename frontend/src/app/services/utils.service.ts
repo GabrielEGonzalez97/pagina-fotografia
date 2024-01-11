@@ -27,7 +27,7 @@ export class UtilsService {
     const photoUrl: string = window.URL.createObjectURL(blob);
 
     return {
-      photoName: photoWithinAlbumInfo.name.split('.png')[0],
+      photoName: photoWithinAlbumInfo.name.replace(/\.[^.]+$/, ''),
       photoUrl,
       photoCreatedTime: photoWithinAlbumInfo.createdTime,
       album: albumInfo,

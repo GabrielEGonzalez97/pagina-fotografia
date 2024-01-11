@@ -16,7 +16,7 @@
 
             <ng-container *ngIf="!photoLoading">
                 <ng-container [ngTemplateOutlet]="photoTemplate"
-                    [ngTemplateOutletContext]="{photo: photos[i]}"></ng-container>
+                    [ngTemplateOutletContext]="{photo: photos[i + pageIndex * pageSize]}"></ng-container>
             </ng-container>
         </ng-container>
     </ng-container>
