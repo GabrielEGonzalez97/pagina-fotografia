@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IGoogleDriveFields } from './interfaces';
 
-const BACKEND_API_URL: string = 'http://127.0.0.1:8000';
+const BACKEND_API_URL: string = 'https://surfphoto-page.vercel.app';
 
 @Injectable({
   providedIn: 'root',
