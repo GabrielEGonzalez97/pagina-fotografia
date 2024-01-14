@@ -49,6 +49,8 @@ $loading-container-background-color: white;
     .mat-mdc-progress-spinner {
         --mdc-circular-progress-active-indicator-color: lightgray;
     }
+
+    @include wave-container;
 }
 
 @mixin photo-name {
@@ -112,5 +114,59 @@ $loading-container-background-color: white;
                 opacity: 0.25;
             }
         }
+    }
+}
+
+@mixin wave-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .wave {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-image: url("assets/images/wave.png");
+      background-size: cover;
+      background-repeat: repeat-x;
+      animation: 10s surf linear infinite;
+    }
+
+    @keyframes surf {
+      0% {
+        background-position-x: 0px;
+      }
+      100% {
+        background-position-x: 5000px;
+      }
+    }
+
+    img {
+      height: 200px;
+      width: 200px;
+      margin-top: -100px;
+      animation: 1s surfing ease-in-out infinite;
+    }
+  
+    @keyframes surfing {
+      0% {
+        transform: translate(20px);
+      }
+      25% {
+        transform: translate(10px);
+      }
+      50% {
+        transform: translate(15px);
+      }
+      75% {
+        transform: translate(20px);
+      }
+      100% {
+        transform: translate(20px);
+      }
     }
 }
