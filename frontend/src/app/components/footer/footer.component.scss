@@ -1,17 +1,29 @@
+@import 'src/styles';
+
 .footer-container{
     width: calc((100%) - 2rem);
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    background-color: #01161E;
-    padding: 1rem;
+    background-color: $secondary-color;
+    padding: 2rem 1rem;
 
-    .logo{
-        font-size: 50px;
-        height: 50px;
-        width: 50px;
-        opacity: 0.5;
+    .legend-container {
+        display: flex;
+        align-items: center;
+
+        p {
+            color: $titles-color;
+            margin-right: 1rem;
+        }
     }
 
+    .logo {
+        font-size: 48px;
+        height: 48px;
+        width: 48px;
+        margin-top: 1rem;
+        margin-right: 1rem;
+    }
 }
