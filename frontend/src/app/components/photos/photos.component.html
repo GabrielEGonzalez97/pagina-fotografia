@@ -1,7 +1,9 @@
 <div class="principal-container">
-    <div class="album-title">
-        <h2>{{ albumInfo?.albumName }}</h2>
-    </div>
+    <ng-container *ngIf="albumInfo">
+        <div class="album-title">
+            <h2>{{ albumInfo.albumName }}</h2>
+        </div>
+    </ng-container>
 
     <div class="sort-icon-container" matTooltip="Ordenar por fecha de creación" matTooltipPosition="left"
         (click)="sortPhotosByCreatedTime()">
@@ -42,7 +44,7 @@
     </div>
 </div>
 
-<mat-paginator class="pagination" [length]="photosToShow.length" [pageSize]="pageSize" [pageIndex]="pageIndex"
+<mat-paginator class="pagination-container" [length]="photosToShow.length" [pageSize]="pageSize" [pageIndex]="pageIndex"
     (page)="onPageChange($event)" showFirstLastButtons></mat-paginator>
 
 <ng-template #photoTemplate let-photo='photo'>

@@ -7,3 +7,110 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+$principal-color: #163b60;
+$secondary-color: #01161e;
+$titles-color: white;
+$icons-color: white;
+$loading-container-background-color: white;
+
+@mixin photos-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    width: auto;
+    height: auto;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+    margin-right: 3rem;
+    margin-left: 3rem;
+}
+
+@mixin photo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    width: calc(100% / 3 - 1rem);
+    height: auto;
+    margin: 0.5rem;
+    aspect-ratio: 4/3;
+}
+
+@mixin photo {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $loading-container-background-color;
+
+    .mat-mdc-progress-spinner {
+        --mdc-circular-progress-active-indicator-color: lightgray;
+    }
+}
+
+@mixin photo-name {
+    margin: 0;
+    margin-bottom: 0.5rem !important;
+    color: #fff;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+@mixin photo-legend {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: calc(100% - 2rem);
+    padding: 1rem;
+    background-color: $secondary-color;
+}
+
+@mixin photo-container-with-content-hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+@mixin sort-icon-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 1rem;
+
+    .mat-icon {
+        color: $icons-color;
+    }
+}
+
+@mixin sort-icon-container-hover {
+    cursor: pointer;
+    opacity: 0.75;
+}
+
+@mixin pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $principal-color;
+
+    ::ng-deep {
+        .mat-mdc-paginator-page-size-label, .mat-mdc-paginator-page-size-value, .mat-mdc-paginator-range-label {
+            color: white !important;
+        }
+
+        .mat-mdc-icon-button {
+            .mat-mdc-paginator-icon {
+                fill: white;
+            }
+        }
+
+        .mat-mdc-icon-button:disabled {
+            .mat-mdc-paginator-icon {
+                fill: white;
+                opacity: 0.25;
+            }
+        }
+    }
+}

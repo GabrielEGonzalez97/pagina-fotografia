@@ -1,20 +1,18 @@
+@import 'src/styles';
+
 .page-container {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     position: relative;
     height: auto;
-    margin: 0; // TODO: Review if this is needed
-    font-family: sans-serif; //if we will change the color of the background, we need to verify the color of the strings
-    background-color: #4a6b8b;
+    margin: 0;
+    font-family: sans-serif;
+    background-color: $principal-color;
 
     .page-content {
         position: relative;
         flex: 1;
         height: auto;
     }
-}
-
-:host(body) {
-    margin: 0;
 }
