@@ -2,7 +2,7 @@
 
 .nav-container {
   width: 100%;
-  height: calc(100% - 20rem);
+  height: calc(100% - 26rem);
   display: flex;
   justify-content: flex-end;
 
@@ -13,7 +13,6 @@
     flex-direction: column;
     justify-content: flex-start;
     background-color: $secondary-color;
-    transition-duration: 1.2s;
 
     .nav-menu {
       width: fit-content;
