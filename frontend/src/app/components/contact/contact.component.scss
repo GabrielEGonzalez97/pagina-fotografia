@@ -1,20 +1,18 @@
-.contact{
+.contact {
     display: flex;
     flex-direction: row;
 
-    .instagram-img{
-        font-size: 40px;
-        height: 40px;
-        width: 40px;
-        margin-right: 2vh;
-        
-    }
+    a {
+        margin-right: 1rem;
 
-    .mail-img{
-        font-size: 40px;
-        height: 40px;
-        width: 40px;
-        margin-right: 2vh;
-    }
+        .instagram-img, .mail-img {
+            font-size: 32px;
+            height: 32px;
+            width: 32px;
+        }
 
+        .instagram-img:hover, .mail-img:hover {
+            opacity: 0.75;
+        }
+    }
 }
