@@ -1,9 +1,6 @@
-<nav class="nav-container" [ngClass]="{ 'nav-container-position' : active }">
-    <div class="nav-buttons" [ngClass]="{ 'aside-bar' : active }">
-        <button mat-icon-button color="accent" class="nav-menu" (click)="setActiveShow()">
-            <mat-icon>menu</mat-icon>
-        </button>
-        <div class="nav-buttons-menu" [ngClass]="{ 'show' : active }">
+<nav class="nav-container">
+    <div class="nav-buttons">
+        <div class="nav-buttons-menu">
             <a class="link-pages" (click)="navigateTo('')">Álbumes</a>
             <a class="link-pages" (click)="navigateTo('fotos')">Fotos</a>
             <input class="search" type="text" placeholder="buscar..." alt="searcher" (input)="onInputChange($event)">
