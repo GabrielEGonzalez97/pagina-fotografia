@@ -81,6 +81,29 @@
     }
 }
 
+.image-not-found-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: calc(100% / 6 - 1rem);
+
+    @media screen and (max-width: 1024px) {
+        width: calc(100% / 3 - 1rem);
+    }
+
+    @media screen and (max-width: 768px) {
+        width: calc(100% - 1rem);
+    }
+
+    img {
+        width: 100%;
+    }
+
+    p {
+        width: 100%;
+        color: $titles-color;
+    }
+}
+
 .pagination-container {
     @include pagination-container;
 }
