@@ -10,6 +10,7 @@
 
 .albums-container {
     @include photos-container;
+    width: calc(100% - 6rem);
 
     .photo-container {
         @include photo-container;
