@@ -28,4 +28,4 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Deploy
 
-ng deploy --base-href=https://gabrielegonzalez97.github.io/pagina-fotografia/
+ng deploy --base-href=https://surfphotos.com.ar
