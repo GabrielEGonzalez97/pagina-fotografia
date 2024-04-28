@@ -109,14 +109,14 @@ export class PhotosComponent {
                 this.httpService.getPhotosWithinAlbum(albumInfo.id)
               ).then(async (photosWithinAlbum: IGoogleDriveFields[]) => {
                 totalPhotosCount += photosWithinAlbum.length;
+                const album: IAlbum = {
+                  albumId: albumInfo.id,
+                  albumName: albumInfo.name,
+                  albumCreatedTime: albumInfo.createdTime,
+                  photos: photosWithinAlbum,
+                };
                 photosWithinAlbum.forEach(
                   async (photoWithinAlbum: IGoogleDriveFields) => {
-                    const album: IAlbum = {
-                      albumId: albumInfo.id,
-                      albumName: albumInfo.name,
-                      albumCreatedTime: albumInfo.createdTime,
-                      photos: photosWithinAlbum,
-                    };
                     const photo: IPhoto = {
                       photoName: photoWithinAlbum.name.replace(/\.[^.]+$/, ''),
                       photoUrl: `https://lh3.googleusercontent.com/d/${photoWithinAlbum.id}`,

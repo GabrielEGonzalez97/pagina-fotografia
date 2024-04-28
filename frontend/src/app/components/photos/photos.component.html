@@ -55,7 +55,7 @@
 <ng-template #photoTemplate let-photo='photo'>
     <div class="photo-container photo-container-with-content" (click)="openPhoto(photo)"
         (mouseover)="photo.showLegend = true" (mouseout)="photo.showLegend = false">
-        <img class="photo" [src]="photo.photoUrl">
+        <img class="photo" [src]="photo.photoUrl" onerror="this.src='assets/images/surfer.png'">
         <div class="photo-legend" [ngClass]="{'show-legend': photo.showLegend}">
             <h4 class="photo-name">{{photo.photoName}}</h4>
         </div>
