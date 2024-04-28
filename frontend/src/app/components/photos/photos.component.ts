@@ -76,21 +76,23 @@ export class PhotosComponent {
           photosWithinAlbum.forEach(
             async (photoWithinAlbum: IGoogleDriveFields) => {
               if (this.albumInfo) {
-                await this.utilsService
-                  .getPhoto(photoWithinAlbum, this.albumInfo)
-                  .then((photo: IPhoto) => {
-                    photo.showLegend = false;
-                    this.photos.push(photo);
-                    this.photosLoading[this.photos.length - 1] = false;
-                    this.photosLoading.push(true);
-                    this.albumService.emitChange(this.photos);
-                    this.getPaginatedPhotos();
-                    photosCount += 1;
+                const photo: IPhoto = {
+                  photoName: photoWithinAlbum.name.replace(/\.[^.]+$/, ''),
+                  photoUrl: `https://lh3.googleusercontent.com/d/${photoWithinAlbum.id}`,
+                  photoCreatedTime: photoWithinAlbum.createdTime,
+                  album: this.albumInfo,
+                  showLegend: false,
+                };
+                this.photos.push(photo);
+                this.photosLoading[this.photos.length - 1] = false;
+                this.photosLoading.push(true);
+                this.albumService.emitChange(this.photos);
+                this.getPaginatedPhotos();
+                photosCount += 1;
 
-                    if (photosCount === photosWithinAlbum.length) {
-                      this.arePhotosLoading = false;
-                    }
-                  });
+                if (photosCount === photosWithinAlbum.length) {
+                  this.arePhotosLoading = false;
+                }
               }
             }
           );
@@ -115,21 +117,23 @@ export class PhotosComponent {
                       albumCreatedTime: albumInfo.createdTime,
                       photos: photosWithinAlbum,
                     };
-                    await this.utilsService
-                      .getPhoto(photoWithinAlbum, album)
-                      .then((photo: IPhoto) => {
-                        photo.showLegend = false;
-                        this.photos.push(photo);
-                        this.photosLoading[this.photos.length - 1] = false;
-                        this.photosLoading.push(true);
-                        this.albumService.emitChange(this.photos);
-                        this.getPaginatedPhotos();
-                        photosCount += 1;
+                    const photo: IPhoto = {
+                      photoName: photoWithinAlbum.name.replace(/\.[^.]+$/, ''),
+                      photoUrl: `https://lh3.googleusercontent.com/d/${photoWithinAlbum.id}`,
+                      photoCreatedTime: photoWithinAlbum.createdTime,
+                      album: album,
+                      showLegend: false,
+                    };
+                    this.photos.push(photo);
+                    this.photosLoading[this.photos.length - 1] = false;
+                    this.photosLoading.push(true);
+                    this.albumService.emitChange(this.photos);
+                    this.getPaginatedPhotos();
+                    photosCount += 1;
 
-                        if (photosCount === totalPhotosCount) {
-                          this.arePhotosLoading = false;
-                        }
-                      });
+                    if (photosCount === totalPhotosCount) {
+                      this.arePhotosLoading = false;
+                    }
                   }
                 );
               });

@@ -138,7 +138,7 @@ def get_photos_within_album(album_id: str):
                 .list(
                     q=query_to_search_for_albums,
                     spaces="drive",
-                    fields="nextPageToken, files(id, name, mimeType, createdTime)",
+                    fields="nextPageToken, files(id, name, mimeType, createdTime, webViewLink)",
                     pageToken=page_token,
                 )
                 .execute()

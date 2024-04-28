@@ -68,20 +68,21 @@ export class AlbumsComponent implements OnInit {
                   albumCreatedTime: albumInfo.createdTime,
                   photos: photosWithinAlbum,
                 };
-                await this.utilsService
-                  .getPhoto(photosWithinAlbum[0], album)
-                  .then((photo: IPhoto) => {
-                    this.photos.push(photo);
-                    this.photosLoading[this.photos.length - 1] = false;
-                    this.photosLoading.push(true);
-                    this.albumService.emitChange(this.photos);
-                    this.getPaginatedPhotos();
-                    photosCount += 1;
+                this.photos.push({
+                  photoName: photosWithinAlbum[0].name.replace(/\.[^.]+$/, ''),
+                  photoUrl: `https://lh3.googleusercontent.com/d/${photosWithinAlbum[0].id}`,
+                  photoCreatedTime: photosWithinAlbum[0].createdTime,
+                  album: album,
+                });
+                this.photosLoading[this.photos.length - 1] = false;
+                this.photosLoading.push(true);
+                this.albumService.emitChange(this.photos);
+                this.getPaginatedPhotos();
+                photosCount += 1;
 
-                    if (photosCount === this.albumsInfo.length) {
-                      this.arePhotosLoading = false;
-                    }
-                  });
+                if (photosCount === this.albumsInfo.length) {
+                  this.arePhotosLoading = false;
+                }
               } else {
                 photosCount += 1;
                 if (photosCount === this.albumsInfo.length) {
