@@ -1,15 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { NUMBER_PHOTOS_PER_PAGE } from 'src/app/common/constants';
 import { IAlbum, IPhoto } from 'src/app/common/interfaces';
 import { AlbumService } from 'src/app/services/albums.service';
 import { HttpService } from 'src/app/services/http.service';
 import { IGoogleDriveFields } from 'src/app/services/interfaces';
 import { NavBarService } from 'src/app/services/navbar.service';
-import { UtilsService } from 'src/app/services/utils.service';
+import { BasePhotos } from '../base-photos/base-photos';
 import { PhotoComponent } from '../photo/photo.component';
 
 @Component({
@@ -17,46 +15,27 @@ import { PhotoComponent } from '../photo/photo.component';
   templateUrl: './photos.component.html',
   styleUrls: ['./photos.component.scss'],
 })
-export class PhotosComponent {
-  public photos: IPhoto[] = [];
-  public photosToShow: IPhoto[] = [];
-
-  public arePhotosLoading: boolean = true;
-  public photosLoading: boolean[] = [];
-
-  public pageSize: number = NUMBER_PHOTOS_PER_PAGE;
-  public pageIndex: number = 0;
-
+export class PhotosComponent extends BasePhotos implements OnInit {
   public albumInfo: IAlbum | null = null;
 
   private albumIdRouteParameter: string = '';
-  private nameOfThePhotoToSearch: string = '';
-
-  private sortAscending: boolean = true;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private albumService: AlbumService,
     private dialog: MatDialog,
     private httpService: HttpService,
-    private navBarService: NavBarService,
-    private utilsService: UtilsService
-  ) {}
+    navBarService: NavBarService
+  ) {
+    super(navBarService);
+  }
 
   public async ngOnInit(): Promise<void> {
+    super.onInit((photo: IPhoto) => photo.photoName);
+
     const albumIdParamValue: string | null =
       this.activatedRoute.snapshot.paramMap.get('albumId');
     this.albumIdRouteParameter = albumIdParamValue ? albumIdParamValue : '';
-
-    this.navBarService.filterEmitted$.subscribe((filter: string) => {
-      this.nameOfThePhotoToSearch = filter;
-      this.pageIndex = 0;
-      this.getPaginatedPhotos();
-    });
-
-    for (let i: number = 0; i < this.pageSize; i++) {
-      this.photosLoading.push(true);
-    }
 
     let photosCount: number = 0;
     let totalPhotosCount: number = 0;
@@ -144,28 +123,12 @@ export class PhotosComponent {
     }
   }
 
-  public onPageChange(event: PageEvent): void {
-    this.pageIndex = event.pageIndex;
+  public override getPaginatedPhotos(): IPhoto[] {
+    return super.getPaginatedPhotos((photo: IPhoto) => photo.photoName);
   }
 
-  public getPaginatedLoadingPhotos(): boolean[] {
-    const startIndex: number = this.pageIndex * this.pageSize;
-    return this.photosLoading.slice(startIndex, startIndex + this.pageSize);
-  }
-
-  public getPaginatedPhotos(): IPhoto[] {
-    const startIndex: number = this.pageIndex * this.pageSize;
-    if (this.nameOfThePhotoToSearch) {
-      this.photosToShow = this.photos.filter((photo: IPhoto) => {
-        return photo.photoName
-          .toLowerCase()
-          .includes(this.nameOfThePhotoToSearch.toLowerCase());
-      });
-    } else {
-      this.photosToShow = this.photos;
-    }
-
-    return this.photosToShow.slice(startIndex, startIndex + this.pageSize);
+  public override sortPhotosByCreatedTime(): void {
+    super.sortPhotosByCreatedTime((photo: IPhoto) => photo.photoCreatedTime);
   }
 
   public openPhoto(photo: IPhoto): void {
@@ -174,21 +137,5 @@ export class PhotosComponent {
 
     const instance: PhotoComponent = dialogRef.componentInstance;
     instance.photo = photo;
-  }
-
-  public sortPhotosByCreatedTime(): void {
-    this.photos = this.photos.sort((a: IPhoto, b: IPhoto) => {
-      const dateA: Date = new Date(a.photoCreatedTime);
-      const dateB: Date = new Date(b.photoCreatedTime);
-
-      if (this.sortAscending) {
-        return dateA.getTime() - dateB.getTime();
-      } else {
-        return dateB.getTime() - dateA.getTime();
-      }
-    });
-
-    this.sortAscending = !this.sortAscending;
-    this.pageIndex = 0;
   }
 }

@@ -1,52 +1,33 @@
 import { Component, OnInit } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
 import { firstValueFrom } from 'rxjs';
-import { NUMBER_ALBUMS_PER_PAGE } from 'src/app/common/constants';
 import { IAlbum, IPhoto } from 'src/app/common/interfaces';
 import { AlbumService } from 'src/app/services/albums.service';
 import { HttpService } from 'src/app/services/http.service';
 import { IGoogleDriveFields } from 'src/app/services/interfaces';
 import { NavBarService } from 'src/app/services/navbar.service';
 import { UtilsService } from 'src/app/services/utils.service';
+import { BasePhotos } from '../base-photos/base-photos';
 
 @Component({
   selector: 'app-albums', //forma de referenciar el componente en otros componentes
   templateUrl: './albums.component.html', //la referencia del template usado para el componente album
   styleUrls: ['./albums.component.scss'], //referencia del style scss
 })
-export class AlbumsComponent implements OnInit {
-  public photos: IPhoto[] = [];
-  public photosToShow: IPhoto[] = [];
-
-  public arePhotosLoading: boolean = true;
-  public photosLoading: boolean[] = [];
-
-  public pageSize: number = NUMBER_ALBUMS_PER_PAGE;
-  public pageIndex: number = 0;
-
+export class AlbumsComponent extends BasePhotos implements OnInit {
   private rootFolderInfo: IGoogleDriveFields[] = [];
   private albumsInfo: IGoogleDriveFields[] = [];
-  private nameOfTheAlbumToSearch: string = '';
-
-  private sortAscending: boolean = true;
 
   constructor(
     private albumService: AlbumService,
     private httpService: HttpService,
-    private navBarService: NavBarService,
+    navBarService: NavBarService,
     private utilsService: UtilsService
-  ) {}
+  ) {
+    super(navBarService);
+  }
 
   public async ngOnInit(): Promise<void> {
-    this.navBarService.filterEmitted$.subscribe((filter: string) => {
-      this.nameOfTheAlbumToSearch = filter;
-      this.pageIndex = 0;
-      this.getPaginatedPhotos();
-    });
-
-    for (let i: number = 0; i < this.pageSize; i++) {
-      this.photosLoading.push(true);
-    }
+    super.onInit((photo: IPhoto) => photo.album.albumName);
 
     let photosCount: number = 0;
     await firstValueFrom(this.httpService.getRootFolder()).then(
@@ -101,43 +82,13 @@ export class AlbumsComponent implements OnInit {
     this.utilsService.navigateTo(route);
   }
 
-  public onPageChange(event: PageEvent): void {
-    this.pageIndex = event.pageIndex;
+  public override getPaginatedPhotos(): IPhoto[] {
+    return super.getPaginatedPhotos((photo: IPhoto) => photo.album.albumName);
   }
 
-  public getPaginatedLoadingPhotos(): boolean[] {
-    const startIndex: number = this.pageIndex * this.pageSize;
-    return this.photosLoading.slice(startIndex, startIndex + this.pageSize);
-  }
-
-  public getPaginatedPhotos(): IPhoto[] {
-    const startIndex: number = this.pageIndex * this.pageSize;
-    if (this.nameOfTheAlbumToSearch) {
-      this.photosToShow = this.photos.filter((photo: IPhoto) => {
-        return photo.album.albumName
-          .toLowerCase()
-          .includes(this.nameOfTheAlbumToSearch.toLowerCase());
-      });
-    } else {
-      this.photosToShow = this.photos;
-    }
-
-    return this.photosToShow.slice(startIndex, startIndex + this.pageSize);
-  }
-
-  public sortPhotosByCreatedTime(): void {
-    this.photos = this.photos.sort((a: IPhoto, b: IPhoto) => {
-      const dateA: Date = new Date(a.album.albumCreatedTime);
-      const dateB: Date = new Date(b.album.albumCreatedTime);
-
-      if (this.sortAscending) {
-        return dateA.getTime() - dateB.getTime();
-      } else {
-        return dateB.getTime() - dateA.getTime();
-      }
-    });
-
-    this.sortAscending = !this.sortAscending;
-    this.pageIndex = 0;
+  public override sortPhotosByCreatedTime(): void {
+    super.sortPhotosByCreatedTime(
+      (photo: IPhoto) => photo.album.albumCreatedTime
+    );
   }
 }
