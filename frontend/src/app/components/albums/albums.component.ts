@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
+import { NUMBER_ALBUMS_PER_PAGE } from 'src/app/common/constants';
 import { IAlbum, IPhoto } from 'src/app/common/interfaces';
 import { AlbumService } from 'src/app/services/albums.service';
 import { HttpService } from 'src/app/services/http.service';
@@ -23,11 +24,11 @@ export class AlbumsComponent extends BasePhotos implements OnInit {
     navBarService: NavBarService,
     private utilsService: UtilsService
   ) {
-    super(navBarService);
+    super(navBarService, NUMBER_ALBUMS_PER_PAGE);
   }
 
   public async ngOnInit(): Promise<void> {
-    super.onInit((photo: IPhoto) => photo.album.albumName);
+    super.onInit();
 
     let photosCount: number = 0;
     await firstValueFrom(this.httpService.getRootFolder()).then(
@@ -78,17 +79,15 @@ export class AlbumsComponent extends BasePhotos implements OnInit {
     );
   }
 
+  public override getPhotoDateFieldToUse: (photo: IPhoto) => string = (
+    photo: IPhoto
+  ) => photo.album.albumCreatedTime;
+
+  public override getPhotoNameFieldToUse: (photo: IPhoto) => string = (
+    photo: IPhoto
+  ) => photo.album.albumName;
+
   public navigateTo(route: string): void {
     this.utilsService.navigateTo(route);
-  }
-
-  public override getPaginatedPhotos(): IPhoto[] {
-    return super.getPaginatedPhotos((photo: IPhoto) => photo.album.albumName);
-  }
-
-  public override sortPhotosByCreatedTime(): void {
-    super.sortPhotosByCreatedTime(
-      (photo: IPhoto) => photo.album.albumCreatedTime
-    );
   }
 }

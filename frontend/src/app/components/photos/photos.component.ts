@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
+import { NUMBER_PHOTOS_PER_PAGE } from 'src/app/common/constants';
 import { IAlbum, IPhoto } from 'src/app/common/interfaces';
 import { AlbumService } from 'src/app/services/albums.service';
 import { HttpService } from 'src/app/services/http.service';
@@ -27,11 +28,11 @@ export class PhotosComponent extends BasePhotos implements OnInit {
     private httpService: HttpService,
     navBarService: NavBarService
   ) {
-    super(navBarService);
+    super(navBarService, NUMBER_PHOTOS_PER_PAGE);
   }
 
   public async ngOnInit(): Promise<void> {
-    super.onInit((photo: IPhoto) => photo.photoName);
+    super.onInit();
 
     const albumIdParamValue: string | null =
       this.activatedRoute.snapshot.paramMap.get('albumId');
@@ -123,14 +124,6 @@ export class PhotosComponent extends BasePhotos implements OnInit {
     }
   }
 
-  public override getPaginatedPhotos(): IPhoto[] {
-    return super.getPaginatedPhotos((photo: IPhoto) => photo.photoName);
-  }
-
-  public override sortPhotosByCreatedTime(): void {
-    super.sortPhotosByCreatedTime((photo: IPhoto) => photo.photoCreatedTime);
-  }
-
   public openPhoto(photo: IPhoto): void {
     const dialogRef: MatDialogRef<PhotoComponent, any> =
       this.dialog.open(PhotoComponent);
@@ -138,4 +131,12 @@ export class PhotosComponent extends BasePhotos implements OnInit {
     const instance: PhotoComponent = dialogRef.componentInstance;
     instance.photo = photo;
   }
+
+  public override getPhotoDateFieldToUse: (photo: IPhoto) => string = (
+    photo: IPhoto
+  ) => photo.photoCreatedTime;
+
+  public override getPhotoNameFieldToUse: (photo: IPhoto) => string = (
+    photo: IPhoto
+  ) => photo.photoName;
 }

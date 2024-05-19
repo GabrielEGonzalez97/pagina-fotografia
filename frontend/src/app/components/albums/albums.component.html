@@ -5,11 +5,10 @@
 
 <div class="albums-container" oncontextmenu='return false'>
     <ng-container *ngIf="arePhotosLoading">
-        <ng-container *ngFor="let photoLoading of getPaginatedLoadingPhotos(); let i = index;">
+        <ng-container *ngFor="let photoLoading of photosLoading; let i = index;">
             <ng-container *ngIf="photoLoading">
                 <div class="photo-container">
                     <div class="photo">
-                        <!-- <mat-spinner></mat-spinner> -->
                         <div class="wave-container">
                             <div class="wave">
                                 <img src="assets/images/surfer.png" alt="">

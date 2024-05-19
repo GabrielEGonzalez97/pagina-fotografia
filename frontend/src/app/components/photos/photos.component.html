@@ -12,7 +12,7 @@
 
     <div class="photos-container" oncontextmenu='return false'>
         <ng-container *ngIf="arePhotosLoading">
-            <ng-container *ngFor="let photoLoading of getPaginatedLoadingPhotos(); let i = index;">
+            <ng-container *ngFor="let photoLoading of photosLoading; let i = index;">
                 <ng-container *ngIf="photoLoading">
                     <div class="photo-container">
                         <div class="photo">
