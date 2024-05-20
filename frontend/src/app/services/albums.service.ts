@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { IPhoto } from '../common/interfaces';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AlbumService {
-  private emitPhotos = new Subject<IPhoto[]>();
-  public photosEmitted$ = this.emitPhotos.asObservable();
+  private emitPhotos: Subject<IPhoto[]> = new Subject<IPhoto[]>();
+  public photosEmitted$: Observable<IPhoto[]> = this.emitPhotos.asObservable();
 
   constructor() {}
 

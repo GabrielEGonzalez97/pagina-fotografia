@@ -1,14 +1,11 @@
 import { PageEvent } from '@angular/material/paginator';
 import { IPhoto } from 'src/app/common/interfaces';
+import { IGoogleDriveFields } from 'src/app/services/interfaces';
 import { NavBarService } from 'src/app/services/navbar.service';
 
 export abstract class BasePhotos {
   protected photos: IPhoto[] = [];
   protected photosToShow: IPhoto[] = [];
-
-  protected arePhotosLoading: boolean = true;
-  protected photosLoading: boolean[] = [];
-  protected photosLoadingToShow: boolean[] = [];
 
   protected pageSize: number = 0;
   protected pageIndex: number = 0;
@@ -22,36 +19,42 @@ export abstract class BasePhotos {
   }
 
   protected onInit(): void {
-    for (let i: number = 0; i < this.pageSize; i++) {
-      this.photosLoading.push(true);
-    }
+    this.completePhotosWithLoadingPhotos(this.pageSize);
 
-    this.setPaginatedLoadingPhotos();
+    this.setPaginatedPhotos(false);
 
     this.navBarService.filterEmitted$.subscribe((filter: string) => {
       this.nameOfThePhotoToSearch = filter;
       this.pageIndex = 0;
-      this.setPaginatedLoadingPhotos();
-      this.getPaginatedPhotos();
+      this.setPaginatedPhotos(true);
     });
+  }
+
+  protected completePhotosWithLoadingPhotos(numberPhotos: number): void {
+    this.photos = [];
+    for (let i: number = 0; i < numberPhotos; i++) {
+      this.photos.push(this.getLoadingPhoto());
+    }
+  }
+
+  private getLoadingPhoto(): IPhoto {
+    return {
+      photoName: '',
+      photoUrl: '',
+      photoCreatedTime: '',
+      album: null,
+      isLoading: true,
+    };
   }
 
   protected onPageChange(event: PageEvent): void {
     this.pageIndex = event.pageIndex;
-    this.setPaginatedLoadingPhotos();
+    this.setPaginatedPhotos(true);
   }
 
-  protected setPaginatedLoadingPhotos(): void {
+  protected setPaginatedPhotos(useFilter: boolean): void {
     const startIndex: number = this.pageIndex * this.pageSize;
-    this.photosLoadingToShow = this.photosLoading.slice(
-      startIndex,
-      startIndex + this.pageSize
-    );
-  }
-
-  protected getPaginatedPhotos(): IPhoto[] {
-    const startIndex: number = this.pageIndex * this.pageSize;
-    if (this.nameOfThePhotoToSearch) {
+    if (this.nameOfThePhotoToSearch && useFilter) {
       this.photosToShow = this.photos.filter((photo: IPhoto) => {
         return this.getPhotoNameFieldToUse(photo)
           .toLowerCase()
@@ -61,7 +64,10 @@ export abstract class BasePhotos {
       this.photosToShow = this.photos;
     }
 
-    return this.photosToShow.slice(startIndex, startIndex + this.pageSize);
+    this.photosToShow = this.photosToShow.slice(
+      startIndex,
+      startIndex + this.pageSize
+    );
   }
 
   protected sortPhotosByCreatedTime(): void {
@@ -78,6 +84,25 @@ export abstract class BasePhotos {
 
     this.sortAscending = !this.sortAscending;
     this.pageIndex = 0;
+    this.setPaginatedPhotos(true);
+  }
+
+  protected sortAlbumsByCreatedTime(
+    albums: IGoogleDriveFields[]
+  ): IGoogleDriveFields[] {
+    albums = albums.sort(
+      (album1: IGoogleDriveFields, album2: IGoogleDriveFields) => {
+        const dateA: Date = new Date(album1.createdTime);
+        const dateB: Date = new Date(album2.createdTime);
+        return dateB.getTime() - dateA.getTime();
+      }
+    );
+
+    return albums;
+  }
+
+  protected getPhotoNameWithoutExtension(photoName: string): string {
+    return photoName.replace(/\.[^.]+$/, '');
   }
 
   public abstract getPhotoDateFieldToUse: (photo: IPhoto) => string;

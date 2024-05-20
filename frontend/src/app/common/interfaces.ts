@@ -12,5 +12,6 @@ export interface IPhoto {
   photoUrl: string;
   photoCreatedTime: string;
   album: IAlbum;
+  isLoading: boolean;
   showLegend?: boolean;
 }

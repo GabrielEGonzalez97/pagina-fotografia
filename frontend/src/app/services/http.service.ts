@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IGoogleDriveFields } from './interfaces';
+import { IWithState, UtilsService } from './utils.service';
 
 const BACKEND_API_URL: string = 'https://surfphotos-gamma.vercel.app';
 
@@ -9,16 +10,18 @@ const BACKEND_API_URL: string = 'https://surfphotos-gamma.vercel.app';
   providedIn: 'root',
 })
 export class HttpService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private utilsService: UtilsService) {}
 
-  public getRootFolder(): Observable<IGoogleDriveFields[]> {
+  public getRootFolder(): Observable<IWithState<IGoogleDriveFields[]>> {
     const endpointUrl: string = `${BACKEND_API_URL}/getRootFolderInfo`; // here we will need to add the URL for the local deployment
-    return this.http.get<IGoogleDriveFields[]>(endpointUrl);
+    return this.getWithState<IGoogleDriveFields[]>(endpointUrl);
   }
 
-  public getAlbumsInfo(rootFolderId: string): Observable<IGoogleDriveFields[]> {
+  public getAlbumsInfo(
+    rootFolderId: string
+  ): Observable<IWithState<IGoogleDriveFields[]>> {
     const endpointUrl: string = `${BACKEND_API_URL}/getAlbumsInfo/${rootFolderId}`;
-    return this.http.get<IGoogleDriveFields[]>(endpointUrl);
+    return this.getWithState<IGoogleDriveFields[]>(endpointUrl);
   }
 
   public getAlbumInfo(albumId: string): Observable<IGoogleDriveFields> {
@@ -28,9 +31,9 @@ export class HttpService {
 
   public getPhotosWithinAlbum(
     albumId: string
-  ): Observable<IGoogleDriveFields[]> {
+  ): Observable<IWithState<IGoogleDriveFields[]>> {
     const endpointUrl: string = `${BACKEND_API_URL}/getPhotosWithinAlbum/${albumId}`;
-    return this.http.get<IGoogleDriveFields[]>(endpointUrl);
+    return this.getWithState<IGoogleDriveFields[]>(endpointUrl);
   }
 
   public getPhotoById(photoId: string): Observable<ArrayBuffer> {
@@ -39,4 +42,29 @@ export class HttpService {
       responseType: 'arraybuffer',
     });
   }
+
+  private getWithState = <T>(
+    url: string,
+    params?: HttpParams,
+    responseType?: any
+  ) =>
+    this.utilsService.withState(
+      this.http.get<T>(url, { params, responseType })
+    );
+
+  private postWithState = <T>(
+    url: string,
+    body: any,
+    headers?: any,
+    responseType?: any,
+    params?: HttpParams
+  ) => {
+    const httpHeaders = new HttpHeaders({
+      accept: 'application/json',
+      'Content-Type': 'application/json',
+      ...headers,
+    });
+    const options = { headers: httpHeaders };
+    return this.utilsService.withState(this.http.post<T>(url, body, options));
+  };
 }

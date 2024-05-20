@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
 import { NUMBER_ALBUMS_PER_PAGE } from 'src/app/common/constants';
 import { IAlbum, IPhoto } from 'src/app/common/interfaces';
 import { AlbumService } from 'src/app/services/albums.service';
 import { HttpService } from 'src/app/services/http.service';
 import { IGoogleDriveFields } from 'src/app/services/interfaces';
 import { NavBarService } from 'src/app/services/navbar.service';
-import { UtilsService } from 'src/app/services/utils.service';
+import {
+  DONE_STATE,
+  IWithState,
+  UtilsService,
+} from 'src/app/services/utils.service';
 import { BasePhotos } from '../base-photos/base-photos';
 
 @Component({
@@ -15,7 +18,7 @@ import { BasePhotos } from '../base-photos/base-photos';
   styleUrls: ['./albums.component.scss'], //referencia del style scss
 })
 export class AlbumsComponent extends BasePhotos implements OnInit {
-  private rootFolderInfo: IGoogleDriveFields[] = [];
+  private rootFolderInfo: IGoogleDriveFields = null;
   private albumsInfo: IGoogleDriveFields[] = [];
 
   constructor(
@@ -30,53 +33,71 @@ export class AlbumsComponent extends BasePhotos implements OnInit {
   public async ngOnInit(): Promise<void> {
     super.onInit();
 
-    let photosCount: number = 0;
-    await firstValueFrom(this.httpService.getRootFolder()).then(
-      // First we call the endpoint that returns the info of the root folder in Google Drive
-      async (rootFolderInfo: IGoogleDriveFields[]) => {
-        this.rootFolderInfo = rootFolderInfo;
-        await firstValueFrom(
-          this.httpService.getAlbumsInfo(this.rootFolderInfo[0].id) // Second we call the endpoint that returns the info of each folder within the root folder
-        ).then((albumsInfo: IGoogleDriveFields[]) => {
-          this.albumsInfo = albumsInfo;
-          this.albumsInfo.forEach(async (albumInfo: IGoogleDriveFields) => {
-            await firstValueFrom(
-              this.httpService.getPhotosWithinAlbum(albumInfo.id) // Third we call the endpoint that returns the photos within each album folder
-            ).then(async (photosWithinAlbum: IGoogleDriveFields[]) => {
-              if (photosWithinAlbum[0]) {
-                const album: IAlbum = {
-                  albumId: albumInfo.id,
-                  albumName: albumInfo.name,
-                  albumCreatedTime: albumInfo.createdTime,
-                  photos: photosWithinAlbum,
-                };
-                this.photos.push({
-                  photoName: photosWithinAlbum[0].name.replace(/\.[^.]+$/, ''),
-                  photoUrl: `https://lh3.googleusercontent.com/d/${photosWithinAlbum[0].id}`,
-                  photoCreatedTime: photosWithinAlbum[0].createdTime,
-                  album: album,
-                });
-                this.photosLoading[this.photos.length - 1] = false;
-                this.photosLoading.push(true);
-                this.albumService.emitChange(this.photos);
-                this.getPaginatedPhotos();
-                photosCount += 1;
+    this.httpService
+      .getRootFolder()
+      .subscribe((getRootFolderResponse: IWithState<IGoogleDriveFields[]>) => {
+        if (getRootFolderResponse.state === DONE_STATE) {
+          this.rootFolderInfo = getRootFolderResponse.value[0];
 
-                if (photosCount === this.albumsInfo.length) {
-                  this.arePhotosLoading = false;
-                }
-              } else {
-                photosCount += 1;
-                if (photosCount === this.albumsInfo.length) {
-                  this.arePhotosLoading = false;
+          this.httpService
+            .getAlbumsInfo(this.rootFolderInfo.id)
+            .subscribe(
+              (getAlbumsInfoResponse: IWithState<IGoogleDriveFields[]>) => {
+                if (getAlbumsInfoResponse.state === DONE_STATE) {
+                  this.albumsInfo = getAlbumsInfoResponse.value;
+                  this.albumsInfo = this.sortAlbumsByCreatedTime(
+                    this.albumsInfo
+                  );
+
+                  this.completePhotosWithLoadingPhotos(this.albumsInfo.length);
+                  this.albumsInfo.forEach(
+                    (albumInfo: IGoogleDriveFields, index: number) => {
+                      this.httpService
+                        .getPhotosWithinAlbum(albumInfo.id)
+                        .subscribe(
+                          (
+                            getPhotosWithinAlbumResponse: IWithState<
+                              IGoogleDriveFields[]
+                            >
+                          ) => {
+                            if (
+                              getPhotosWithinAlbumResponse.state === DONE_STATE
+                            ) {
+                              if (
+                                getPhotosWithinAlbumResponse.value.length > 0
+                              ) {
+                                const photoInfo: IGoogleDriveFields =
+                                  getPhotosWithinAlbumResponse.value[0];
+                                const album: IAlbum = {
+                                  albumId: albumInfo.id,
+                                  albumName: albumInfo.name,
+                                  albumCreatedTime: albumInfo.createdTime,
+                                  photos: getPhotosWithinAlbumResponse.value,
+                                };
+                                this.photos[index] = {
+                                  photoName: this.getPhotoNameWithoutExtension(
+                                    photoInfo.name
+                                  ),
+                                  photoUrl: `https://lh3.googleusercontent.com/d/${photoInfo.id}`,
+                                  photoCreatedTime: photoInfo.createdTime,
+                                  album: album,
+                                  isLoading: false,
+                                };
+                                this.setPaginatedPhotos(false);
+                              } else {
+                                this.photos[index].isLoading = false;
+                              }
+                            }
+                          }
+                        );
+                    }
+                  );
                   this.albumService.emitChange(this.photos);
                 }
               }
-            });
-          });
-        });
-      }
-    );
+            );
+        }
+      });
   }
 
   public override getPhotoDateFieldToUse: (photo: IPhoto) => string = (
