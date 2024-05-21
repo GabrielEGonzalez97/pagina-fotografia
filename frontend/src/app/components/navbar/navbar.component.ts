@@ -12,6 +12,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 })
 export class NavbarComponent implements OnInit {
   public active: boolean = false;
+  public inputText: string = '';
 
   constructor(
     private elementRef: ElementRef,
@@ -29,8 +30,12 @@ export class NavbarComponent implements OnInit {
     this.utilsService.navigateTo(route);
   }
 
-  public onInputChange(event: any): void {
-    this.navBarService.emitFilterChange(event.target.value);
+  public onInputChange(): void {
+    this.navBarService.emitFilterChange(this.inputText);
+  }
+
+  public clearInputText(): void {
+    this.inputText = '';
   }
 
   public onClickOutsideRightPanel(event: any): void {

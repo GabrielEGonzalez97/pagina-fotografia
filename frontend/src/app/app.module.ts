@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -33,6 +34,7 @@ import { PhotosComponent } from './components/photos/photos.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule,
     HttpClientModule,
     CommonModule,
     BrowserAnimationsModule,

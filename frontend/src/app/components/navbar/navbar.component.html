@@ -3,7 +3,13 @@
         <div class="nav-buttons-menu">
             <a class="link-pages" (click)="navigateTo('')">Álbumes</a>
             <a class="link-pages" (click)="navigateTo('fotos')">Fotos</a>
-            <input class="search" type="text" placeholder="buscar..." alt="searcher" (input)="onInputChange($event)">
+            <div class="input-container">
+                <input [(ngModel)]="inputText" class="search" type="text" placeholder="Buscar..." alt="searcher"
+                    (input)="onInputChange()">
+                <ng-container *ngIf="inputText">
+                    <img src="assets/images/close-icon.svg" class="x-icon" (click)="clearInputText()">
+                </ng-container>
+            </div>
         </div>
     </div>
 </nav>
