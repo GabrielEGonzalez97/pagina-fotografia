@@ -12,14 +12,14 @@ export abstract class BasePhotos {
 
   protected nameOfThePhotoToSearch: string = '';
 
-  protected sortAscending: boolean = true;
+  protected sortAscending: boolean = false;
 
   constructor(private navBarService: NavBarService, pageSize: number) {
     this.pageSize = pageSize;
   }
 
   protected onInit(): void {
-    this.completePhotosWithLoadingPhotos(this.pageSize);
+    this.initPhotosWithLoadingPhotos(this.pageSize);
 
     this.setPaginatedPhotos(false);
 
@@ -30,7 +30,7 @@ export abstract class BasePhotos {
     });
   }
 
-  protected completePhotosWithLoadingPhotos(numberPhotos: number): void {
+  private initPhotosWithLoadingPhotos(numberPhotos: number): void {
     this.photos = [];
     for (let i: number = 0; i < numberPhotos; i++) {
       this.photos.push(this.getLoadingPhoto());
@@ -43,6 +43,30 @@ export abstract class BasePhotos {
       photoUrl: '',
       photoCreatedTime: '',
       album: null,
+      isLoading: true,
+    };
+  }
+
+  protected completePhotosWithLoadingPhotos(
+    albumsInfo: IGoogleDriveFields[]
+  ): void {
+    this.photos = [];
+    for (let i: number = 0; i < albumsInfo.length; i++) {
+      this.photos.push(this.getLoadingPhotoWithAlbum(albumsInfo[i]));
+    }
+  }
+
+  private getLoadingPhotoWithAlbum(albumInfo: IGoogleDriveFields): IPhoto {
+    return {
+      photoName: '',
+      photoUrl: '',
+      photoCreatedTime: '',
+      album: {
+        albumId: albumInfo.id,
+        albumName: albumInfo.name,
+        albumCreatedTime: albumInfo.createdTime,
+        photos: [],
+      },
       isLoading: true,
     };
   }
