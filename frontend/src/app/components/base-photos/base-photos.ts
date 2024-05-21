@@ -12,10 +12,12 @@ export abstract class BasePhotos {
 
   protected nameOfThePhotoToSearch: string = '';
 
-  protected sortAscending: boolean = false;
+  protected sortAscending: boolean = true;
+  protected tooltipIconText: string = '';
 
   constructor(private navBarService: NavBarService, pageSize: number) {
     this.pageSize = pageSize;
+    this.updateTooltipIconText();
   }
 
   protected onInit(): void {
@@ -28,6 +30,15 @@ export abstract class BasePhotos {
       this.pageIndex = 0;
       this.setPaginatedPhotos(true);
     });
+  }
+
+  private updateTooltipIconText(): void {
+    this.tooltipIconText = 'Ordenar por fecha de creación';
+    if (this.sortAscending) {
+      this.tooltipIconText = this.tooltipIconText + ' ' + 'ascendente';
+    } else {
+      this.tooltipIconText = this.tooltipIconText + ' ' + 'descendente';
+    }
   }
 
   private initPhotosWithLoadingPhotos(numberPhotos: number): void {
@@ -107,6 +118,7 @@ export abstract class BasePhotos {
     });
 
     this.sortAscending = !this.sortAscending;
+    this.updateTooltipIconText();
     this.pageIndex = 0;
     this.setPaginatedPhotos(true);
   }
@@ -118,7 +130,12 @@ export abstract class BasePhotos {
       (album1: IGoogleDriveFields, album2: IGoogleDriveFields) => {
         const dateA: Date = new Date(album1.createdTime);
         const dateB: Date = new Date(album2.createdTime);
-        return dateB.getTime() - dateA.getTime();
+
+        if (!this.sortAscending) {
+          return dateA.getTime() - dateB.getTime();
+        } else {
+          return dateB.getTime() - dateA.getTime();
+        }
       }
     );
 

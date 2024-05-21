@@ -84,8 +84,9 @@ $loading-container-background-color: white;
     right: 0;
     margin: 1rem;
 
-    .mat-icon {
-        color: $icons-color;
+    img {
+        width: 24px;
+        height: 24px;
     }
 }
 

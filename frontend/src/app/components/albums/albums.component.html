@@ -1,6 +1,11 @@
-<div class="sort-icon-container" matTooltip="Ordenar por fecha de creación" matTooltipPosition="left"
+<div class="sort-icon-container" [matTooltip]="tooltipIconText" matTooltipPosition="left"
     (click)="sortPhotosByCreatedTime()">
-    <mat-icon>sort_by_alpha</mat-icon>
+    <ng-container *ngIf="sortAscending">
+        <img src="assets/images/sort-alphabetical-ascending-icon.svg" alt="Ordenar ascendentemente">
+    </ng-container>
+    <ng-container *ngIf="!sortAscending">
+        <img src="assets/images/sort-alphabetical-descending-icon.svg" alt="Ordenar ascendentemente">
+    </ng-container>
 </div>
 
 <div class="albums-container" oncontextmenu='return false'>
