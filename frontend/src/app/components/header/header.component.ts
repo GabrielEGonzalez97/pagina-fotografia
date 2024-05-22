@@ -1,30 +1,26 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IPhoto } from 'src/app/common/interfaces';
+import { AlbumService } from 'src/app/services/albums.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnChanges {
-  @Input() public photos: IPhoto[] = [];
+export class HeaderComponent implements OnInit {
+  public photos: IPhoto[] = [];
 
   public photoToShow: IPhoto | null = null;
 
-  constructor() {}
+  constructor(private albumService: AlbumService) {}
 
-  public ngOnInit(): void {}
-
-  public ngOnChanges(changes: SimpleChanges): void {
-    if (
-      changes['photos'] &&
-      changes['photos'].currentValue &&
-      changes['photos'].currentValue.length > 0
-    ) {
-      if (!this.photoToShow) {
+  public ngOnInit(): void {
+    this.albumService.photosEmitted$.subscribe((photos: IPhoto[]) => {
+      this.photos = photos;
+      if (!this.photoToShow || !this.photoToShow.photoUrl) {
         this.changeHeaderPicture();
       }
-    }
+    });
   }
 
   public changeHeaderPicture(): void {

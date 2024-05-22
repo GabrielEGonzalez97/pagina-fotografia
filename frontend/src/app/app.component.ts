@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { IPhoto } from './common/interfaces';
-import { AlbumService } from './services/albums.service';
 
 @Component({
   selector: 'app-root',
@@ -8,9 +6,6 @@ import { AlbumService } from './services/albums.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  public photos: IPhoto[] = [];
-  
-
   /*
   document.getElementsByClassName('page-container').oncontextmenu = function(){return false}
 
@@ -24,11 +19,7 @@ export class AppComponent {
     alert('click izquierdo')
   })*/
 
-  constructor(private albumService: AlbumService) {}
+  constructor() {}
 
-  public ngOnInit(): void {
-    this.albumService.photosEmitted$.subscribe((photos: IPhoto[]) => {
-      this.photos = photos;
-    });
-  }
+  public ngOnInit(): void {}
 }
