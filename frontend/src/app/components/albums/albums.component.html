@@ -36,7 +36,7 @@
 </div>
 
 <mat-paginator class="pagination-container" [length]="photos.length" [pageSize]="pageSize" [pageIndex]="pageIndex"
-    (page)="onPageChange($event)" showFirstLastButtons>
+    (page)="onPageChange($event)">
 </mat-paginator>
 
 <ng-template #photoTemplate let-photo='photo'>

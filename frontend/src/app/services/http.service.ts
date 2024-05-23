@@ -24,9 +24,11 @@ export class HttpService {
     return this.getWithState<IGoogleDriveFields[]>(endpointUrl);
   }
 
-  public getAlbumInfo(albumId: string): Observable<IGoogleDriveFields> {
+  public getAlbumInfo(
+    albumId: string
+  ): Observable<IWithState<IGoogleDriveFields>> {
     const endpointUrl: string = `${BACKEND_API_URL}/getAlbumInfo/${albumId}`;
-    return this.http.get<IGoogleDriveFields>(endpointUrl);
+    return this.getWithState<IGoogleDriveFields>(endpointUrl);
   }
 
   public getPhotosWithinAlbum(

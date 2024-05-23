@@ -30,7 +30,7 @@ export class AlbumsComponent extends BasePhotos implements OnInit {
     super(navBarService, NUMBER_ALBUMS_PER_PAGE);
   }
 
-  public async ngOnInit(): Promise<void> {
+  public ngOnInit(): void {
     super.onInit();
 
     this.httpService
@@ -49,7 +49,7 @@ export class AlbumsComponent extends BasePhotos implements OnInit {
                     this.albumsInfo
                   );
 
-                  this.completePhotosWithLoadingPhotos(this.albumsInfo);
+                  this.completeAlbumPhotosWithLoadingPhotos(this.albumsInfo);
                   this.albumsInfo.forEach((albumInfo: IGoogleDriveFields) => {
                     this.httpService
                       .getPhotosWithinAlbum(albumInfo.id)
@@ -78,6 +78,7 @@ export class AlbumsComponent extends BasePhotos implements OnInit {
                                 );
                               if (existingPhotoIndex !== -1) {
                                 this.photos[existingPhotoIndex] = {
+                                  photoId: photoInfo.id,
                                   photoName: this.getPhotoNameWithoutExtension(
                                     photoInfo.name
                                   ),

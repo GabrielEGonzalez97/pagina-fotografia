@@ -50,6 +50,7 @@ export abstract class BasePhotos {
 
   private getLoadingPhoto(): IPhoto {
     return {
+      photoId: '',
       photoName: '',
       photoUrl: '',
       photoCreatedTime: '',
@@ -58,7 +59,7 @@ export abstract class BasePhotos {
     };
   }
 
-  protected completePhotosWithLoadingPhotos(
+  protected completeAlbumPhotosWithLoadingPhotos(
     albumsInfo: IGoogleDriveFields[]
   ): void {
     this.photos = [];
@@ -67,8 +68,34 @@ export abstract class BasePhotos {
     }
   }
 
+  protected completePhotosWithLoadingPhotos(
+    photos: IGoogleDriveFields[]
+  ): void {
+    this.photos = [];
+    for (let i: number = 0; i < photos.length; i++) {
+      this.photos.push(this.getLoadingPhotoWithId(photos[i]));
+    }
+  }
+
+  private getLoadingPhotoWithId(photoInfo: IGoogleDriveFields): IPhoto {
+    return {
+      photoId: photoInfo.id,
+      photoName: '',
+      photoUrl: '',
+      photoCreatedTime: '',
+      album: {
+        albumId: '',
+        albumName: '',
+        albumCreatedTime: '',
+        photos: [],
+      },
+      isLoading: true,
+    };
+  }
+
   private getLoadingPhotoWithAlbum(albumInfo: IGoogleDriveFields): IPhoto {
     return {
+      photoId: '',
       photoName: '',
       photoUrl: '',
       photoCreatedTime: '',

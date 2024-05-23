@@ -5,51 +5,48 @@
         </div>
     </ng-container>
 
-    <div class="sort-icon-container" matTooltip="Ordenar por fecha de creación" matTooltipPosition="left"
+    <div class="sort-icon-container" [matTooltip]="tooltipIconText" matTooltipPosition="left"
         (click)="sortPhotosByCreatedTime()">
-        <mat-icon>sort_by_alpha</mat-icon>
+        <ng-container *ngIf="sortAscending">
+            <img src="assets/images/sort-alphabetical-ascending-icon.svg" alt="Ordenar ascendentemente">
+        </ng-container>
+        <ng-container *ngIf="!sortAscending">
+            <img src="assets/images/sort-alphabetical-descending-icon.svg" alt="Ordenar ascendentemente">
+        </ng-container>
     </div>
 
     <div class="photos-container" oncontextmenu='return false'>
-        <!-- <ng-container *ngIf="arePhotosLoading">
-            <ng-container *ngFor="let photoLoading of photosLoading; let i = index;">
-                <ng-container *ngIf="photoLoading">
-                    <div class="photo-container">
-                        <div class="photo">
-                            <div class="wave-container">
-                                <div class="wave">
-                                    <img src="assets/images/surfer.png" alt="">
-                                </div>
+        <ng-container *ngFor="let photo of photosToShow; let i = index;">
+            <ng-container *ngIf="photo.isLoading">
+                <div class="photo-container">
+                    <div class="photo">
+                        <div class="wave-container">
+                            <div class="wave">
+                                <img src="assets/images/surfer.png" alt="">
                             </div>
                         </div>
                     </div>
-                </ng-container>
-
-                <ng-container *ngIf="!photoLoading">
-                    <ng-container [ngTemplateOutlet]="photoTemplate"
-                        [ngTemplateOutletContext]="{photo: photos[i + pageIndex * pageSize]}"></ng-container>
-                </ng-container>
+                </div>
             </ng-container>
-        </ng-container> -->
 
-        <!-- <ng-container *ngIf="!arePhotosLoading">
-            <ng-container *ngFor="let photo of getPaginatedPhotos()">
+            <ng-container *ngIf="!photo.isLoading">
                 <ng-container [ngTemplateOutlet]="photoTemplate"
                     [ngTemplateOutletContext]="{photo: photo}"></ng-container>
             </ng-container>
+        </ng-container>
 
-            <ng-container *ngIf="photosToShow.length === 0">
-                <div class="image-not-found-container">
-                    <img src="assets/images/Image-not-found.png">
-                    <p>No se encontraron fotos</p>
-                </div>
-            </ng-container>
-        </ng-container> -->
+        <ng-container *ngIf="photos.length === 0">
+            <div class="image-not-found-container">
+                <img src="assets/images/Image-not-found.png">
+                <p>No se encontraron fotos</p>
+            </div>
+        </ng-container>
     </div>
 </div>
 
-<mat-paginator class="pagination-container" [length]="photosToShow.length" [pageSize]="pageSize" [pageIndex]="pageIndex"
-    (page)="onPageChange($event)" showFirstLastButtons></mat-paginator>
+<mat-paginator class="pagination-container" [length]="photos.length" [pageSize]="pageSize" [pageIndex]="pageIndex"
+    (page)="onPageChange($event)">
+</mat-paginator>
 
 <ng-template #photoTemplate let-photo='photo'>
     <div class="photo-container photo-container-with-content" (click)="openPhoto(photo)"
