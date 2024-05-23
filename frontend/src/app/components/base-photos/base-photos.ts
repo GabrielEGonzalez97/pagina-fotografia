@@ -77,6 +77,18 @@ export abstract class BasePhotos {
     }
   }
 
+  protected completeAllPhotosWithLoadingPhotos(
+    photos: IGoogleDriveFields[]
+  ): void {
+    for (let i: number = 0; i < photos.length; i++) {
+      this.photos.push(this.getLoadingPhotoWithId(photos[i]));
+    }
+  }
+
+  protected removeFirstLoadingPhotos(numberPhotos: number): void {
+    this.photos.splice(0, numberPhotos);
+  }
+
   private getLoadingPhotoWithId(photoInfo: IGoogleDriveFields): IPhoto {
     return {
       photoId: photoInfo.id,

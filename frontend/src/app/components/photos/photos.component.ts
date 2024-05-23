@@ -92,47 +92,81 @@ export class PhotosComponent extends BasePhotos implements OnInit {
           }
         });
     } else {
-      // await firstValueFrom(this.httpService.getRootFolder()).then(
-      //   async (rootFolderInfo: IGoogleDriveFields[]) => {
-      //     await firstValueFrom(
-      //       this.httpService.getAlbumsInfo(rootFolderInfo[0].id)
-      //     ).then(async (albumsInfo: IGoogleDriveFields[]) => {
-      //       albumsInfo.forEach(async (albumInfo: IGoogleDriveFields) => {
-      //         await firstValueFrom(
-      //           this.httpService.getPhotosWithinAlbum(albumInfo.id)
-      //         ).then(async (photosWithinAlbum: IGoogleDriveFields[]) => {
-      //           totalPhotosCount += photosWithinAlbum.length;
-      //           const album: IAlbum = {
-      //             albumId: albumInfo.id,
-      //             albumName: albumInfo.name,
-      //             albumCreatedTime: albumInfo.createdTime,
-      //             photos: photosWithinAlbum,
-      //           };
-      //           photosWithinAlbum.forEach(
-      //             async (photoWithinAlbum: IGoogleDriveFields) => {
-      //               const photo: IPhoto = {
-      //                 photoName: photoWithinAlbum.name.replace(/\.[^.]+$/, ''),
-      //                 photoUrl: `https://lh3.googleusercontent.com/d/${photoWithinAlbum.id}`,
-      //                 photoCreatedTime: photoWithinAlbum.createdTime,
-      //                 album: album,
-      //                 showLegend: false,
-      //               };
-      //               this.photos.push(photo);
-      //               this.photosLoading[this.photos.length - 1] = false;
-      //               this.photosLoading.push(true);
-      //               this.albumService.emitChange(this.photos);
-      //               this.getPaginatedPhotos();
-      //               photosCount += 1;
-      //               if (photosCount === totalPhotosCount) {
-      //                 this.arePhotosLoading = false;
-      //               }
-      //             }
-      //           );
-      //         });
-      //       });
-      //     });
-      //   }
-      // );
+      this.httpService
+        .getRootFolder()
+        .subscribe(
+          (getRootFolderResponse: IWithState<IGoogleDriveFields[]>) => {
+            if (getRootFolderResponse.state === DONE_STATE) {
+              this.httpService
+                .getAlbumsInfo(getRootFolderResponse.value[0].id)
+                .subscribe(
+                  (getAlbumsInfoResponse: IWithState<IGoogleDriveFields[]>) => {
+                    if (getAlbumsInfoResponse.state === DONE_STATE) {
+                      const albumsInfo: IGoogleDriveFields[] =
+                        getAlbumsInfoResponse.value;
+                      albumsInfo.forEach((albumInfo: IGoogleDriveFields) => {
+                        this.httpService
+                          .getPhotosWithinAlbum(albumInfo.id)
+                          .subscribe(
+                            (
+                              getPhotosWithinAlbumResponse: IWithState<
+                                IGoogleDriveFields[]
+                              >
+                            ) => {
+                              if (
+                                getPhotosWithinAlbumResponse.state ===
+                                DONE_STATE
+                              ) {
+                                const photosWithinAlbum: IGoogleDriveFields[] =
+                                  getPhotosWithinAlbumResponse.value;
+                                const album: IAlbum = {
+                                  albumId: albumInfo.id,
+                                  albumName: albumInfo.name,
+                                  albumCreatedTime: albumInfo.createdTime,
+                                  photos: photosWithinAlbum,
+                                };
+                                this.completeAllPhotosWithLoadingPhotos(
+                                  photosWithinAlbum
+                                );
+                                photosWithinAlbum.forEach(
+                                  (photoWithinAlbum: IGoogleDriveFields) => {
+                                    const newPhoto: IPhoto = {
+                                      photoId: photoWithinAlbum.id,
+                                      photoName:
+                                        this.getPhotoNameWithoutExtension(
+                                          photoWithinAlbum.name
+                                        ),
+                                      photoUrl: `https://lh3.googleusercontent.com/d/${photoWithinAlbum.id}`,
+                                      photoCreatedTime:
+                                        photoWithinAlbum.createdTime,
+                                      album: album,
+                                      showLegend: false,
+                                      isLoading: false,
+                                    };
+                                    const existingPhotoIndex: number =
+                                      this.photos.findIndex(
+                                        (photo: IPhoto) =>
+                                          photo.photoId === newPhoto.photoId
+                                      );
+                                    if (existingPhotoIndex !== -1) {
+                                      this.photos[existingPhotoIndex] =
+                                        newPhoto;
+                                    }
+                                    this.setPaginatedPhotos(true);
+                                    this.albumService.emitChange(this.photos);
+                                  }
+                                );
+                              }
+                            }
+                          );
+                      });
+                      this.removeFirstLoadingPhotos(NUMBER_PHOTOS_PER_PAGE);
+                    }
+                  }
+                );
+            }
+          }
+        );
     }
   }
 
