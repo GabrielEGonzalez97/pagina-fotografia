@@ -41,7 +41,8 @@
 
 <ng-template #photoTemplate let-photo='photo'>
     <div class="photo-container photo-container-with-content" (click)="navigateTo('album/' + photo.album.albumId)">
-        <img class="photo" [src]="photo.photoUrl">
+        <img class="photo" [src]="photo.photoUrl" onerror="this.src='assets/images/surfer.png'"
+            referrerpolicy="no-referrer">
         <div class="photo-legend">
             <h4 class="album-name">{{photo.album.albumName}}</h4>
             <h5 class="album-number-photos">{{photo.album.photos.length}} fotos</h5>
