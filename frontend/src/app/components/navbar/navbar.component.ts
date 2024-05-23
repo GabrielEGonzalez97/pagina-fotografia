@@ -36,6 +36,7 @@ export class NavbarComponent implements OnInit {
 
   public clearInputText(): void {
     this.inputText = '';
+    this.onInputChange();
   }
 
   public onClickOutsideRightPanel(event: any): void {
