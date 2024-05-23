@@ -104,6 +104,8 @@ export class PhotosComponent extends BasePhotos implements OnInit {
                     if (getAlbumsInfoResponse.state === DONE_STATE) {
                       const albumsInfo: IGoogleDriveFields[] =
                         getAlbumsInfoResponse.value;
+
+                      let count: number = 0;
                       albumsInfo.forEach((albumInfo: IGoogleDriveFields) => {
                         this.httpService
                           .getPhotosWithinAlbum(albumInfo.id)
@@ -117,6 +119,7 @@ export class PhotosComponent extends BasePhotos implements OnInit {
                                 getPhotosWithinAlbumResponse.state ===
                                 DONE_STATE
                               ) {
+                                count += 1;
                                 const photosWithinAlbum: IGoogleDriveFields[] =
                                   getPhotosWithinAlbumResponse.value;
                                 const album: IAlbum = {
@@ -128,6 +131,9 @@ export class PhotosComponent extends BasePhotos implements OnInit {
                                 this.completeAllPhotosWithLoadingPhotos(
                                   photosWithinAlbum
                                 );
+                                if (count === 1) {
+                                  this.removeFirstLoadingPhotos(NUMBER_PHOTOS_PER_PAGE);
+                                }
                                 photosWithinAlbum.forEach(
                                   (photoWithinAlbum: IGoogleDriveFields) => {
                                     const newPhoto: IPhoto = {
@@ -160,7 +166,6 @@ export class PhotosComponent extends BasePhotos implements OnInit {
                             }
                           );
                       });
-                      this.removeFirstLoadingPhotos(NUMBER_PHOTOS_PER_PAGE);
                     }
                   }
                 );
